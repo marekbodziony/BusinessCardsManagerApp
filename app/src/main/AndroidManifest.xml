@@ -18,7 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MyCardActivity" />
-        <activity android:name=".EditMyCardActivity"></activity>
+        <activity android:name=".EditMyCardActivity" />
+        <activity android:name=".CardsListActivity"></activity>
     </application>
 
 </manifest>

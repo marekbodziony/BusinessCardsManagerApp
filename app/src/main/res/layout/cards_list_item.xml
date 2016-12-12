@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="100px"
+        android:layout_height="100px"
+        android:id="@+id/myCard_logo"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/person_x311"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/nameTxt"
+        android:text="Name : "
+        android:textSize="20dp"
+        android:layout_toRightOf="@id/myCard_logo"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jan Kowalski"
+        android:id="@+id/nameVal"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_toRightOf="@id/nameTxt"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/mobileTxt"
+        android:text="Phone : "
+        android:layout_toRightOf="@id/myCard_logo"
+        android:layout_below="@id/nameTxt"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="123456789"
+        android:id="@+id/mobileVal"
+        android:textStyle="bold"
+        android:layout_toRightOf="@id/nameTxt"
+        android:layout_below="@id/nameTxt"/>
+
+</RelativeLayout>

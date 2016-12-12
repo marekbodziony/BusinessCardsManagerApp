@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.mbodziony.simplebussinescards.WelcomeActivity">
+    tools:context="mbodziony.businesscardsmanager.WelcomeActivity">
 
 
     <TextView
@@ -60,17 +60,18 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="510dp" >
         <Button
-            android:layout_width="450px"
+            android:layout_width="400px"
             android:layout_height="wrap_content"
-            android:text="Cards"
-            android:id="@+id/cards_btn"
-            />
+            android:text="Cards list"
+            android:id="@+id/cardsList_btn"
+            android:onClick="showCardsList"/>
         <Button
-            android:layout_width="450px"
+            android:layout_width="400px"
             android:layout_height="wrap_content"
             android:text="My Card"
             android:id="@+id/my_card_btn"
-            android:layout_toRightOf="@id/cards_btn"
+            android:layout_toRightOf="@id/cardsList_btn"
+            android:layout_marginLeft="50dp"
             android:onClick="showMyCard"/>
 
     </LinearLayout>

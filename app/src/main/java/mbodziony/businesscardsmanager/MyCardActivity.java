@@ -12,6 +12,7 @@ public class MyCardActivity extends AppCompatActivity {
 
     private Card myCard;
     private Card myCard1;
+    private Intent editMyCard;
 
     private long id;
     private ImageView logo;
@@ -89,7 +90,8 @@ public class MyCardActivity extends AppCompatActivity {
     }
     // edit MyCard
     public void editMyCard(View view){
-        Intent editMyCard = new Intent(this, EditMyCardActivity.class);
+        editMyCard = new Intent(this, EditMyCardActivity.class);
+        putCardInfoToIntent();
         startActivity(editMyCard);
     }
 
@@ -162,5 +164,23 @@ public class MyCardActivity extends AppCompatActivity {
             otherTxt.setVisibility(View.GONE);
             other.setVisibility(View.GONE);
         }
+    }
+
+    // private method put MyCard data (fields) to Intent object
+    private void putCardInfoToIntent(){
+        editMyCard.putExtra("id",myCard.getId());
+        editMyCard.putExtra("name",myCard.getName());
+        editMyCard.putExtra("mobile",myCard.getMobile());
+        editMyCard.putExtra("phone",myCard.getMobile());
+        editMyCard.putExtra("fax",myCard.getFax());
+        editMyCard.putExtra("email",myCard.getEmail());
+        editMyCard.putExtra("web",myCard.getWeb());
+        editMyCard.putExtra("company",myCard.getCompany());
+        editMyCard.putExtra("address",myCard.getAddress());
+        editMyCard.putExtra("job",myCard.getJob());
+        editMyCard.putExtra("facebook",myCard.getFacebook());
+        editMyCard.putExtra("tweeter",myCard.getTweeter());
+        editMyCard.putExtra("skype",myCard.getSkype());
+        editMyCard.putExtra("other",myCard.getOther());
     }
 }

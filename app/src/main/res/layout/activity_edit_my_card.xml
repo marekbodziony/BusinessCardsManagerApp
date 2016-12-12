@@ -12,7 +12,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context="com.example.mbodziony.simplebussinescards.MyCardActivity">
+        tools:context="mbodziony.businesscardsmanager.MyCardActivity">
         <ImageView
             android:layout_width="350px"
             android:layout_height="350px"
@@ -31,12 +31,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_nameVal"
-            android:layout_below="@id/myCard_logo"
-            android:text="default name"
+            android:hint="blabla"
             android:textStyle="bold"
-            android:layout_marginTop="30dp"
-            android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:textSize="20sp"
+            android:layout_alignBaseline="@+id/myCard_nameTxt"
+            android:layout_alignBottom="@+id/myCard_nameTxt"
+            android:layout_alignStart="@+id/myCard_mobileVal"
+            android:singleLine="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,16 +46,17 @@
             android:layout_below="@id/myCard_nameTxt"
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
-        <TextView
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_mobileVal"
-            android:text="123445678"
+            android:hint="123445678"
             android:textStyle="bold"
-            android:layout_below="@id/myCard_nameTxt"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:layout_alignBaseline="@+id/myCard_mobileTxt"
+            android:layout_alignBottom="@+id/myCard_mobileTxt"
+            android:layout_alignStart="@+id/myCard_phoneVal"
+            android:singleLine="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -63,34 +65,35 @@
             android:layout_below="@id/myCard_mobileTxt"
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
-        <TextView
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_phoneVal"
-            android:text="123445678"
+            android:hint="123445678"
             android:textStyle="bold"
-            android:layout_below="@id/myCard_mobileVal"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:layout_alignBaseline="@+id/myCard_phoneTxt"
+            android:layout_alignBottom="@+id/myCard_phoneTxt"
+            android:layout_alignStart="@+id/myCard_faxVal"
+            android:singleLine="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_faxTxt"
             android:text="Fax : "
-            android:layout_below="@id/myCard_phoneVal"
+            android:textSize="15sp"
             android:layout_marginTop="10dp"
-            android:textSize="15sp" />
-        <TextView
+            android:layout_below="@id/myCard_phoneTxt" />
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_faxVal"
-            android:text="123445678"
+            android:hint="123445678"
             android:textStyle="bold"
-            android:layout_below="@id/myCard_phoneVal"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:layout_below="@+id/myCard_phoneTxt"
+            android:layout_alignStart="@+id/myCard_emailVal"
+            android:singleLine="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -99,16 +102,18 @@
             android:layout_below="@id/myCard_faxTxt"
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
-        <TextView
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_emailVal"
-            android:text="default@gmail.com"
+            android:hint="default@gmail.com"
             android:textStyle="bold"
             android:layout_below="@id/myCard_faxTxt"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:layout_alignBaseline="@+id/myCard_emailTxt"
+            android:textSize="15sp"
+            android:singleLine="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -117,16 +122,18 @@
             android:layout_below="@id/myCard_emailTxt"
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
-        <TextView
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_webVal"
-            android:text="http://www.default.com"
+            android:hint="http://www.default.com"
             android:textStyle="bold"
             android:layout_below="@id/myCard_emailTxt"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:layout_alignBaseline="@+id/myCard_webTxt"
+            android:textSize="15sp"
+            android:singleLine="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -135,16 +142,18 @@
             android:layout_below="@id/myCard_webTxt"
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
-        <TextView
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_companyVal"
-            android:text="Default Inc."
+            android:hint="Default Inc."
             android:textStyle="bold"
             android:layout_below="@id/myCard_webTxt"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:layout_alignBaseline="@id/myCard_companyTxt"
+            android:textSize="15sp"
+            android:singleLine="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -153,16 +162,18 @@
             android:layout_below="@id/myCard_companyTxt"
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
-        <TextView
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_addressVal"
-            android:text="16 Default St., 01-000 City, Country"
+            android:hint="16 Default St., 01-000 City, Country"
             android:textStyle="bold"
             android:layout_below="@id/myCard_companyTxt"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:layout_alignBaseline="@id/myCard_addressTxt"
+            android:singleLine="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -171,16 +182,18 @@
             android:layout_below="@id/myCard_addressVal"
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
-        <TextView
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_jobVal"
-            android:text="default job"
+            android:hint="default job"
             android:textStyle="bold"
             android:layout_below="@id/myCard_addressVal"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:layout_alignBaseline="@id/myCard_jobTxt"
+            android:textSize="15sp"
+            android:singleLine="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -189,16 +202,18 @@
             android:layout_below="@id/myCard_jobTxt"
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
-        <TextView
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_facebookVal"
-            android:text="http://facebook.com/default"
+            android:hint="http://facebook.com/default"
             android:textStyle="bold"
             android:layout_below="@id/myCard_jobTxt"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:layout_alignBaseline="@id/myCard_facebookTxt"
+            android:textSize="15sp"
+            android:singleLine="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -207,16 +222,18 @@
             android:layout_below="@id/myCard_facebookTxt"
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
-        <TextView
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_tweeterVal"
-            android:text="default@tweeter.com"
+            android:hint="default@tweeter.com"
             android:textStyle="bold"
             android:layout_below="@id/myCard_facebookTxt"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:layout_alignBaseline="@id/myCard_tweeterTxt"
+            android:textSize="15sp"
+            android:singleLine="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -225,16 +242,18 @@
             android:layout_below="@id/myCard_tweeterTxt"
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
-        <TextView
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_skypeVal"
-            android:text="default skype"
+            android:hint="default skype"
             android:textStyle="bold"
             android:layout_below="@id/myCard_tweeterTxt"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:layout_alignBaseline="@id/myCard_skypeTxt"
+            android:textSize="15sp"
+            android:singleLine="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -243,16 +262,17 @@
             android:layout_below="@id/myCard_skypeTxt"
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
-        <TextView
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_otherVal"
-            android:text="other default details"
+            android:hint="other default details"
             android:textStyle="bold"
             android:layout_below="@id/myCard_skypeTxt"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:layout_alignBaseline="@id/myCard_otherTxt"
+            android:textSize="15sp"/>
         <Button
             android:layout_width="150dp"
             android:layout_height="wrap_content"
@@ -260,7 +280,8 @@
             android:id="@+id/editMyCard_cancelBtn"
             android:layout_below="@id/myCard_otherTxt"
             android:layout_marginTop="40dp"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentLeft="true"
+            android:onClick="cancel"/>
         <Button
             android:layout_width="150dp"
             android:layout_height="wrap_content"
@@ -268,7 +289,8 @@
             android:id="@+id/editMyCard_saveBtn"
             android:layout_below="@id/myCard_otherTxt"
             android:layout_marginTop="40dp"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:onClick="save"/>
 
     </RelativeLayout>
 </ScrollView>
