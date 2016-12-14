@@ -36,7 +36,8 @@
             android:textStyle="bold"
             android:layout_marginTop="30dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textIsSelectable="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -54,7 +55,8 @@
             android:layout_below="@id/myCard_nameTxt"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textIsSelectable="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -72,7 +74,8 @@
             android:layout_below="@id/myCard_mobileVal"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textIsSelectable="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -90,7 +93,8 @@
             android:layout_below="@id/myCard_phoneVal"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textIsSelectable="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -108,7 +112,8 @@
             android:layout_below="@id/myCard_faxTxt"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textIsSelectable="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -126,7 +131,8 @@
             android:layout_below="@id/myCard_emailTxt"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textIsSelectable="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -144,7 +150,8 @@
             android:layout_below="@id/myCard_webTxt"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textIsSelectable="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -162,7 +169,8 @@
             android:layout_below="@id/myCard_companyTxt"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textIsSelectable="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -180,7 +188,8 @@
             android:layout_below="@id/myCard_addressVal"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textIsSelectable="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -206,7 +215,8 @@
             android:text="Tweeter : "
             android:layout_below="@id/myCard_facebookTxt"
             android:layout_marginTop="10dp"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textIsSelectable="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -216,7 +226,8 @@
             android:layout_below="@id/myCard_facebookTxt"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textIsSelectable="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -242,7 +253,8 @@
             android:text="Other : "
             android:layout_below="@id/myCard_skypeTxt"
             android:layout_marginTop="10dp"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textIsSelectable="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -252,7 +264,8 @@
             android:layout_below="@id/myCard_skypeTxt"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textIsSelectable="true"/>
         <Button
             android:layout_width="200px"
             android:layout_height="200px"

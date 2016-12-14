@@ -31,13 +31,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_nameVal"
-            android:hint="blabla"
+            android:hint="name"
             android:textStyle="bold"
             android:textSize="20sp"
             android:layout_alignBaseline="@+id/myCard_nameTxt"
             android:layout_alignBottom="@+id/myCard_nameTxt"
             android:layout_alignStart="@+id/myCard_mobileVal"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:inputType="textCapWords"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,7 +57,8 @@
             android:layout_alignBaseline="@+id/myCard_mobileTxt"
             android:layout_alignBottom="@+id/myCard_mobileTxt"
             android:layout_alignStart="@+id/myCard_phoneVal"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:inputType="phone"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -75,7 +77,8 @@
             android:layout_alignBaseline="@+id/myCard_phoneTxt"
             android:layout_alignBottom="@+id/myCard_phoneTxt"
             android:layout_alignStart="@+id/myCard_faxVal"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:inputType="phone"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -93,7 +96,8 @@
             android:textSize="15sp"
             android:layout_below="@+id/myCard_phoneTxt"
             android:layout_alignStart="@+id/myCard_emailVal"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:inputType="phone"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -113,7 +117,8 @@
             android:layout_toRightOf="@id/myCard_nameTxt"
             android:layout_alignBaseline="@+id/myCard_emailTxt"
             android:textSize="15sp"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:inputType="textEmailAddress"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -133,7 +138,8 @@
             android:layout_toRightOf="@id/myCard_nameTxt"
             android:layout_alignBaseline="@+id/myCard_webTxt"
             android:textSize="15sp"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:inputType="textUri"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -153,7 +159,8 @@
             android:layout_toRightOf="@id/myCard_nameTxt"
             android:layout_alignBaseline="@id/myCard_companyTxt"
             android:textSize="15sp"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:inputType="textCapWords"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -173,7 +180,8 @@
             android:layout_toRightOf="@id/myCard_nameTxt"
             android:textSize="15sp"
             android:layout_alignBaseline="@id/myCard_addressTxt"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:inputType="textPostalAddress"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -213,7 +221,8 @@
             android:layout_toRightOf="@id/myCard_nameTxt"
             android:layout_alignBaseline="@id/myCard_facebookTxt"
             android:textSize="15sp"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:inputType="textUri"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -233,7 +242,8 @@
             android:layout_toRightOf="@id/myCard_nameTxt"
             android:layout_alignBaseline="@id/myCard_tweeterTxt"
             android:textSize="15sp"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:inputType="textEmailAddress"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -272,7 +282,8 @@
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/myCard_nameTxt"
             android:layout_alignBaseline="@id/myCard_otherTxt"
-            android:textSize="15sp"/>
+            android:textSize="15sp"
+            android:singleLine="true"/>
         <Button
             android:layout_width="150dp"
             android:layout_height="wrap_content"
@@ -291,6 +302,24 @@
             android:layout_marginTop="40dp"
             android:layout_alignParentRight="true"
             android:onClick="save"/>
+        <Button
+            android:layout_width="128px"
+            android:layout_height="120px"
+            android:text="..."
+            android:id="@+id/loadImageBtn"
+            android:layout_alignBottom="@id/myCard_logo"
+            android:layout_toEndOf="@+id/myCard_logo"
+            android:layout_marginLeft="5dp"/>
+        <Button
+            android:layout_width="128px"
+            android:layout_height="128px"
+            android:background="@drawable/camera_x64"
+            android:id="@+id/takePhotoBtn"
+            android:layout_alignBottom="@+id/myCard_logo"
+            android:layout_toRightOf="@id/myCard_logo"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="35dp"
+            android:onClick="takePhoto"/>
 
     </RelativeLayout>
 </ScrollView>

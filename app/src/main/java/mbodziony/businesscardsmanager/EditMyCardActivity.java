@@ -1,6 +1,9 @@
 package mbodziony.businesscardsmanager;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,11 +12,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.File;
+
 public class EditMyCardActivity extends AppCompatActivity {
 
     private Button cancel;
     private Button save;
+    private Button photo;
 
+    private long id;
     private ImageView logo;
     private EditText name;
     private EditText mobile;
@@ -29,15 +36,17 @@ public class EditMyCardActivity extends AppCompatActivity {
     private EditText skype;
     private EditText other;
 
-    private Intent editMyCardIntent;
+    private Card myCard;
+    private Intent myCardIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_my_card);
 
-        editMyCardIntent = getIntent();
+        myCardIntent = getIntent();
 
+        id = myCardIntent.getLongExtra("id",0);
         logo = (ImageView)findViewById(R.id.myCard_logo);
         name = (EditText)findViewById(R.id.myCard_nameVal);
         mobile = (EditText)findViewById(R.id.myCard_mobileVal);
@@ -57,32 +66,86 @@ public class EditMyCardActivity extends AppCompatActivity {
 
         cancel = (Button)findViewById(R.id.editMyCard_cancelBtn);
         save = (Button)findViewById(R.id.editMyCard_saveBtn);
+        photo = (Button)findViewById(R.id.takePhotoBtn);
     }
 
     // get card info from Intent object
     public void getCardInfoFromIntent(){
-        name.setHint(editMyCardIntent.getStringExtra("name"));
-        mobile.setHint(editMyCardIntent.getStringExtra("mobile"));
-        phone.setHint(editMyCardIntent.getStringExtra("phone"));
-        fax.setHint(editMyCardIntent.getStringExtra("fax"));
-        email.setHint(editMyCardIntent.getStringExtra("email"));
-        web.setHint(editMyCardIntent.getStringExtra("web"));
-        company.setHint(editMyCardIntent.getStringExtra("company"));
-        address.setHint(editMyCardIntent.getStringExtra("address"));
-        job.setHint(editMyCardIntent.getStringExtra("job"));
-        facebook.setHint(editMyCardIntent.getStringExtra("facebook"));
-        tweeter.setHint(editMyCardIntent.getStringExtra("tweeter"));
-        skype.setHint(editMyCardIntent.getStringExtra("skype"));
-        other.setHint(editMyCardIntent.getStringExtra("other"));
+
+        name.setText(myCardIntent.getStringExtra("name"));
+        name.setHint("");
+        mobile.setText(myCardIntent.getStringExtra("mobile"));
+        mobile.setHint("");
+        phone.setText(myCardIntent.getStringExtra("phone"));
+        phone.setHint("");
+        fax.setText(myCardIntent.getStringExtra("fax"));
+        fax.setHint("");
+        email.setText(myCardIntent.getStringExtra("email"));
+        email.setHint("");
+        web.setText(myCardIntent.getStringExtra("web"));
+        web.setHint("");
+        company.setText(myCardIntent.getStringExtra("company"));
+        company.setHint("");
+        address.setText(myCardIntent.getStringExtra("address"));
+        address.setHint("");
+        job.setText(myCardIntent.getStringExtra("job"));
+        job.setHint("");
+        facebook.setText(myCardIntent.getStringExtra("facebook"));
+        facebook.setHint("");
+        tweeter.setText(myCardIntent.getStringExtra("tweeter"));
+        tweeter.setHint("");
+        skype.setText(myCardIntent.getStringExtra("skype"));
+        skype.setHint("");
+        other.setText(myCardIntent.getStringExtra("other"));
+        other.setHint("");
     }
 
     // cancel
     public void cancel(View view){
         Toast.makeText(getApplicationContext(),"CANCEL",Toast.LENGTH_SHORT).show();
+        finish();
     }
     // save
     public void save(View view){
-        Toast.makeText(getApplicationContext(),"SAVE",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(),"SAVED",Toast.LENGTH_SHORT).show();
+        myCardIntent.setClass(this,MyCardActivity.class);
+        putCardInfoToIntent();
+        startActivity(myCardIntent);
     }
 
+
+    // take photo
+    public void takePhoto (View view){
+        Intent photo = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(photo,1);
+    }
+
+    // set taken photo to logo ImageView
+    @Override
+    protected void onActivityResult(int requestCode, int respondCode, Intent data){
+        if (requestCode == 1 && respondCode == RESULT_OK){
+            Bundle extras = data.getExtras();
+            Bitmap bitmap = (Bitmap)extras.get("data");
+            logo.setImageBitmap(bitmap);
+        }
+    }
+
+    // private method put MyCard data (fields) to Intent object
+    private void putCardInfoToIntent(){
+        myCardIntent.putExtra("save",1);    // indicates that intent came from user edition
+        myCardIntent.putExtra("id",id);
+            myCardIntent.putExtra("name",""+name.getText());
+        myCardIntent.putExtra("mobile",""+mobile.getText());
+        myCardIntent.putExtra("phone",""+phone.getText());
+        myCardIntent.putExtra("fax",""+fax.getText());
+        myCardIntent.putExtra("email",""+email.getText());
+        myCardIntent.putExtra("web",""+web.getText());
+        myCardIntent.putExtra("company",""+company.getText());
+        myCardIntent.putExtra("address",""+address.getText());
+        myCardIntent.putExtra("job",""+job.getText());
+        myCardIntent.putExtra("facebook",""+facebook.getText());
+        myCardIntent.putExtra("tweeter",""+tweeter.getText());
+        myCardIntent.putExtra("skype",""+skype.getText());
+        myCardIntent.putExtra("other",""+other.getText());
+    }
 }
