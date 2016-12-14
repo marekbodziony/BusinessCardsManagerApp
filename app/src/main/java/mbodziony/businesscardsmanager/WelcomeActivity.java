@@ -20,16 +20,27 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome1);
 
         myCard = (Button)findViewById(R.id.my_card_btn);
+        add =  (Button)findViewById(R.id.add_btn);
+        turnOff = (Button)findViewById(R.id.turn_off_btn);
     }
 
     public void showMyCard(View view){
         Intent showMyCardActivity = new Intent(this,MyCardActivity.class);
         startActivity(showMyCardActivity);
     }
-
     //
     public void showCardsList(View view){
         Intent showCardsListActivity = new Intent(this,CardsListActivity.class);
         startActivity(showCardsListActivity);
     }
+
+    public void showAddScreen (View view){
+        Intent showAddScreenActivity = new Intent(this,AddScreen.class);
+        startActivity(showAddScreenActivity);
+    }
+
+    public void turnOff (View view) {
+        finish();
+    }
+
 }

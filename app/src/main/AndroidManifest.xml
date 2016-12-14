@@ -19,7 +19,8 @@
         </activity>
         <activity android:name=".MyCardActivity" />
         <activity android:name=".EditMyCardActivity" />
-        <activity android:name=".CardsListActivity"></activity>
+        <activity android:name=".CardsListActivity" />
+        <activity android:name=".AddScreen"></activity>
     </application>
 
 </manifest>

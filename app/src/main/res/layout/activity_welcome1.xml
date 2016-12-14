@@ -27,7 +27,8 @@
         android:layout_height="70dp"
         android:id="@+id/turn_off_btn"
         android:layout_alignParentRight="true"
-        android:background="@drawable/turn_off1_x131" />
+        android:background="@drawable/turn_off1_x131"
+        android:onClick="turnOff"/>
 
     <Button
         android:layout_width="40dp"
@@ -37,22 +38,14 @@
         android:layout_alignTop="@+id/turn_off_btn"
         android:layout_toStartOf="@+id/turn_off_btn" />
 
-    <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:id="@+id/imageView"
-        android:src="@drawable/welcome_logo_x256"
-        android:layout_below="@+id/welcome_txt"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"/>
-
     <Button
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:id="@+id/add_btn"
         android:background="@drawable/add_x128"
         android:layout_marginTop="500dp"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="showAddScreen"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -75,6 +68,15 @@
             android:onClick="showMyCard"/>
 
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:id="@+id/imageView"
+        android:src="@drawable/welcome_logo_x256"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/welcome_txt"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>
