@@ -1,6 +1,7 @@
 package mbodziony.businesscardsmanager;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -100,13 +101,14 @@ public class MyCardActivity extends AppCompatActivity {
         editMyCardIntent = getIntent();
         //if user edited Card or create new Card then take values from Intent
         if (editMyCardIntent != null && editMyCardIntent.getIntExtra("save",0) == 1){
-            myCard = new Card(null, editMyCardIntent.getStringExtra("name"), editMyCardIntent.getStringExtra("mobile"), editMyCardIntent.getStringExtra("phone"),
+
+            myCard = new Card(editMyCardIntent.getStringExtra("logo_path"), editMyCardIntent.getStringExtra("name"), editMyCardIntent.getStringExtra("mobile"), editMyCardIntent.getStringExtra("phone"),
                     editMyCardIntent.getStringExtra("fax"), editMyCardIntent.getStringExtra("email"), editMyCardIntent.getStringExtra("web"),
                     editMyCardIntent.getStringExtra("company"), editMyCardIntent.getStringExtra("address"), editMyCardIntent.getStringExtra("job"),
                     editMyCardIntent.getStringExtra("facebook"), editMyCardIntent.getStringExtra("tweeter"), editMyCardIntent.getStringExtra("skype"),
                     editMyCardIntent.getStringExtra("other"));
+            logo.setImageURI(Uri.parse(myCard.getLogoImgPath()));
         }
-
         name.setText(myCard.getName());
         mobile.setText(myCard.getMobile());
         phone.setText(myCard.getPhone());
@@ -180,6 +182,7 @@ public class MyCardActivity extends AppCompatActivity {
     // private method put MyCard data (fields) to Intent object
     private void putCardInfoToIntent(){
         editMyCardIntent.putExtra("id",myCard.getId());
+        editMyCardIntent.putExtra("logo_path",myCard.getLogoImgPath());
         editMyCardIntent.putExtra("name",myCard.getName());
         editMyCardIntent.putExtra("mobile",myCard.getMobile());
         editMyCardIntent.putExtra("phone",myCard.getMobile());

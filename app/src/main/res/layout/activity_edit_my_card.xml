@@ -309,7 +309,8 @@
             android:id="@+id/loadImageBtn"
             android:layout_alignBottom="@id/myCard_logo"
             android:layout_toEndOf="@+id/myCard_logo"
-            android:layout_marginLeft="5dp"/>
+            android:layout_marginLeft="5dp"
+            android:onClick="loadImageFromGallery"/>
         <Button
             android:layout_width="128px"
             android:layout_height="128px"
