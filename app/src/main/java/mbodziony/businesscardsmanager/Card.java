@@ -10,6 +10,7 @@ public class Card {
     // fields
     private long id;
     private ImageView logo;
+    private String logoImgPath;
     private String name;
     private String mobile;
     private String phone;
@@ -25,9 +26,10 @@ public class Card {
     private String other;
 
     // constructor
-    public Card (ImageView logo, String name, String mobile, String phone, String fax, String email, String web, String company,
+    public Card (String logoImgPath, String name, String mobile, String phone, String fax, String email, String web, String company,
                  String address, String job, String facebook, String tweeter, String skype, String other){
         this.logo = logo;
+        this.logoImgPath = logoImgPath;
         this.name = name;
         this.mobile = mobile;
         this.phone = phone;
@@ -46,6 +48,7 @@ public class Card {
     // getters
     public long getId()         {return id;}
     public ImageView getLogo()  {return logo;}
+    public String getLogoImgPath() {return logoImgPath;}
     public String getName()     {return name;}
     public String getMobile()   {return mobile;}
     public String getPhone()    {return phone;}
@@ -63,6 +66,7 @@ public class Card {
     // setters
     public void setId(long id)         {this.id = id;}
     public void setLogo(ImageView logo)  {this.logo = logo;}
+    public void setLogoImgPath(String logoImgPath)    {this.logoImgPath = logoImgPath;}
     public void setName(String name)  {this.name = name;}
     public void setMobile(String mobile)  {this.mobile = mobile;}
     public void setPhone(String phone)  {this.phone = phone;}

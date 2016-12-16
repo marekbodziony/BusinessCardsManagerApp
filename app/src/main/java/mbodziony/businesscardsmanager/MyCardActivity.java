@@ -1,6 +1,7 @@
 package mbodziony.businesscardsmanager;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,7 +13,7 @@ public class MyCardActivity extends AppCompatActivity {
 
     private Card myCard;
     private Card myCard1;
-    private Intent editMyCard;
+    private Intent editMyCardIntent;
 
     private long id;
     private ImageView logo;
@@ -90,13 +91,24 @@ public class MyCardActivity extends AppCompatActivity {
     }
     // edit MyCard
     public void editMyCard(View view){
-        editMyCard = new Intent(this, EditMyCardActivity.class);
+        editMyCardIntent = new Intent(this, EditMyCardActivity.class);
         putCardInfoToIntent();
-        startActivity(editMyCard);
+        startActivity(editMyCardIntent);
     }
 
     // private method to set all values of MyCard
     private void setMyCardValues(){
+        editMyCardIntent = getIntent();
+        //if user edited Card or create new Card then take values from Intent
+        if (editMyCardIntent != null && editMyCardIntent.getIntExtra("save",0) == 1){
+
+            myCard = new Card(editMyCardIntent.getStringExtra("logo_path"), editMyCardIntent.getStringExtra("name"), editMyCardIntent.getStringExtra("mobile"), editMyCardIntent.getStringExtra("phone"),
+                    editMyCardIntent.getStringExtra("fax"), editMyCardIntent.getStringExtra("email"), editMyCardIntent.getStringExtra("web"),
+                    editMyCardIntent.getStringExtra("company"), editMyCardIntent.getStringExtra("address"), editMyCardIntent.getStringExtra("job"),
+                    editMyCardIntent.getStringExtra("facebook"), editMyCardIntent.getStringExtra("tweeter"), editMyCardIntent.getStringExtra("skype"),
+                    editMyCardIntent.getStringExtra("other"));
+            logo.setImageURI(Uri.parse(myCard.getLogoImgPath()));
+        }
         name.setText(myCard.getName());
         mobile.setText(myCard.getMobile());
         phone.setText(myCard.getPhone());
@@ -110,6 +122,7 @@ public class MyCardActivity extends AppCompatActivity {
         tweeter.setText(myCard.getTweeter());
         skype.setText(myCard.getSkype());
         other.setText(myCard.getOther());
+
         // hide empty fields
         hideEmptyFields();
     }
@@ -168,19 +181,20 @@ public class MyCardActivity extends AppCompatActivity {
 
     // private method put MyCard data (fields) to Intent object
     private void putCardInfoToIntent(){
-        editMyCard.putExtra("id",myCard.getId());
-        editMyCard.putExtra("name",myCard.getName());
-        editMyCard.putExtra("mobile",myCard.getMobile());
-        editMyCard.putExtra("phone",myCard.getMobile());
-        editMyCard.putExtra("fax",myCard.getFax());
-        editMyCard.putExtra("email",myCard.getEmail());
-        editMyCard.putExtra("web",myCard.getWeb());
-        editMyCard.putExtra("company",myCard.getCompany());
-        editMyCard.putExtra("address",myCard.getAddress());
-        editMyCard.putExtra("job",myCard.getJob());
-        editMyCard.putExtra("facebook",myCard.getFacebook());
-        editMyCard.putExtra("tweeter",myCard.getTweeter());
-        editMyCard.putExtra("skype",myCard.getSkype());
-        editMyCard.putExtra("other",myCard.getOther());
+        editMyCardIntent.putExtra("id",myCard.getId());
+        editMyCardIntent.putExtra("logo_path",myCard.getLogoImgPath());
+        editMyCardIntent.putExtra("name",myCard.getName());
+        editMyCardIntent.putExtra("mobile",myCard.getMobile());
+        editMyCardIntent.putExtra("phone",myCard.getMobile());
+        editMyCardIntent.putExtra("fax",myCard.getFax());
+        editMyCardIntent.putExtra("email",myCard.getEmail());
+        editMyCardIntent.putExtra("web",myCard.getWeb());
+        editMyCardIntent.putExtra("company",myCard.getCompany());
+        editMyCardIntent.putExtra("address",myCard.getAddress());
+        editMyCardIntent.putExtra("job",myCard.getJob());
+        editMyCardIntent.putExtra("facebook",myCard.getFacebook());
+        editMyCardIntent.putExtra("tweeter",myCard.getTweeter());
+        editMyCardIntent.putExtra("skype",myCard.getSkype());
+        editMyCardIntent.putExtra("other",myCard.getOther());
     }
 }

@@ -17,10 +17,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".MyCardActivity" />
         <activity android:name=".EditMyCardActivity" />
         <activity android:name=".CardsListActivity" />
-        <activity android:name=".AddScreen"></activity>
+        <activity android:name=".AddScreen"/>
+
+        <activity android:name=".MyCardActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".EditMyCardActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".CardsListActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".AddScreen" android:screenOrientation="portrait"/>
+
     </application>
+    <uses-feature android:name="android.hardware.camera2" android:required="false"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
 </manifest>
