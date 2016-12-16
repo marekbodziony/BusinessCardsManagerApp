@@ -130,6 +130,11 @@ public class EditMyCardActivity extends AppCompatActivity {
         Intent loadImgIntent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(loadImgIntent,1);
     }
+    // delete logo from MyCard (set default)
+    private void deleteLogo(View view){
+        //logoImgPath = null;
+        logo.setImageResource(R.drawable.person_x311);
+    }
 
 
     @Override
