@@ -35,7 +35,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     public void showAddScreen (View view){
-        Intent showAddScreenActivity = new Intent(this,AddScreen.class);
+        Intent showAddScreenActivity = new Intent(this,AddCardActivity.class);
         startActivity(showAddScreenActivity);
     }
 

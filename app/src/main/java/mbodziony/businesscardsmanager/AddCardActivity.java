@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class AddScreen extends AppCompatActivity {
+public class AddCardActivity extends AppCompatActivity {
 
     private Button home;
     private Button back;
@@ -36,5 +36,10 @@ public class AddScreen extends AppCompatActivity {
     public void showHomeScreen (View view){
         Intent showHomeScreenActivity = new Intent(this,WelcomeActivity.class);
         startActivity(showHomeScreenActivity);
+    }
+
+    public void createNewCard(View view){
+        Intent createNewCardIntent = new Intent(this,EditMyCardActivity.class);
+        startActivity(createNewCardIntent);
     }
 }

@@ -28,7 +28,7 @@
             android:layout_marginTop="30dp"
             android:textSize="20sp" />
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_nameVal"
             android:hint="name"
@@ -48,7 +48,7 @@
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_mobileVal"
             android:hint="123445678"
@@ -68,7 +68,7 @@
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_phoneVal"
             android:hint="123445678"
@@ -88,7 +88,7 @@
             android:layout_marginTop="10dp"
             android:layout_below="@id/myCard_phoneTxt" />
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_faxVal"
             android:hint="123445678"
@@ -107,7 +107,7 @@
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_emailVal"
             android:hint="default@gmail.com"
@@ -128,7 +128,7 @@
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_webVal"
             android:hint="http://www.default.com"
@@ -149,7 +149,7 @@
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_companyVal"
             android:hint="Default Inc."
@@ -170,7 +170,7 @@
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_addressVal"
             android:hint="16 Default St., 01-000 City, Country"
@@ -191,7 +191,7 @@
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_jobVal"
             android:hint="default job"
@@ -211,7 +211,7 @@
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_facebookVal"
             android:hint="http://facebook.com/default"
@@ -232,7 +232,7 @@
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_tweeterVal"
             android:hint="default@tweeter.com"
@@ -253,7 +253,7 @@
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_skypeVal"
             android:hint="default skype"
@@ -273,7 +273,7 @@
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/myCard_otherVal"
             android:hint="other default details"

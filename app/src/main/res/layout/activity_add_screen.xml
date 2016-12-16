@@ -8,15 +8,14 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="mbodziony.businesscardsmanager.AddScreen">
+    tools:context="mbodziony.businesscardsmanager.AddCardActivity">
 
     <Button
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:id="@+id/back_btn"
         android:layout_alignParentRight="true"
-        android:background="@drawable/back_button"
-        android:onClick=""/>
+        android:background="@drawable/back_button"/>
 
     <Button
         android:layout_width="500px"
@@ -24,7 +23,7 @@
         android:text="create new"
         android:id="@+id/create_new_btnbox"
         android:layout_marginLeft="50dp"
-        android:onClick=""
+        android:onClick="createNewCard"
         android:layout_marginEnd="21dp"
         android:layout_alignTop="@+id/create_new_btn"
         android:layout_toStartOf="@+id/back_btn" />
@@ -34,18 +33,16 @@
         android:layout_height="70dp"
         android:id="@+id/create_new_btn"
         android:background="@drawable/add_x128"
-        android:layout_marginTop="51dp"
-        android:onClick=""
+        android:layout_marginTop="49dp"
+        android:onClick="createNewCard"
         android:layout_below="@+id/back_btn"
         android:layout_toStartOf="@+id/home_btn" />
-
     <Button
         android:layout_width="500px"
         android:layout_height="wrap_content"
         android:text="via Bluetooth"
         android:id="@+id/add_bluetooth_btnbox"
         android:layout_marginLeft="50dp"
-        android:onClick=""
         android:layout_marginEnd="21dp"
         android:layout_alignTop="@+id/add_bluetooth_btn"
         android:layout_toStartOf="@+id/back_btn" />
@@ -56,7 +53,6 @@
         android:id="@+id/add_bluetooth_btn"
         android:background="@drawable/add_x128"
         android:layout_marginTop="17dp"
-        android:onClick=""
         android:layout_below="@+id/create_new_btn"
         android:layout_alignStart="@+id/create_new_btn" />
 
@@ -67,7 +63,6 @@
         android:text="via NFC"
         android:id="@+id/add_NFC_btnbox"
         android:layout_marginLeft="50dp"
-        android:onClick=""
         android:layout_marginEnd="21dp"
         android:layout_alignTop="@+id/add_NFC_btn"
         android:layout_toStartOf="@+id/back_btn" />
@@ -78,7 +73,6 @@
         android:id="@+id/add_NFC_btn"
         android:background="@drawable/add_x128"
         android:layout_marginTop="17dp"
-        android:onClick=""
         android:layout_below="@+id/add_bluetooth_btn"
         android:layout_alignStart="@+id/add_bluetooth_btn" />
 
@@ -90,6 +84,8 @@
         android:layout_marginTop="500dp"
         android:layout_centerHorizontal="true"
         android:onClick="showHomeScreen"/>
+
+
 
 </RelativeLayout>
 
