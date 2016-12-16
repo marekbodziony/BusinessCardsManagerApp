@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_add_screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="mbodziony.businesscardsmanager.AddScreen">
+
+    <Button
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/back_btn"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/back_button"
+        android:onClick=""/>
+
+    <Button
+        android:layout_width="500px"
+        android:layout_height="wrap_content"
+        android:text="create new"
+        android:id="@+id/create_new_btnbox"
+        android:layout_marginLeft="50dp"
+        android:onClick=""
+        android:layout_marginEnd="21dp"
+        android:layout_alignTop="@+id/create_new_btn"
+        android:layout_toStartOf="@+id/back_btn" />
+
+    <Button
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/create_new_btn"
+        android:background="@drawable/add_x128"
+        android:layout_marginTop="51dp"
+        android:onClick=""
+        android:layout_below="@+id/back_btn"
+        android:layout_toStartOf="@+id/home_btn" />
+
+    <Button
+        android:layout_width="500px"
+        android:layout_height="wrap_content"
+        android:text="via Bluetooth"
+        android:id="@+id/add_bluetooth_btnbox"
+        android:layout_marginLeft="50dp"
+        android:onClick=""
+        android:layout_marginEnd="21dp"
+        android:layout_alignTop="@+id/add_bluetooth_btn"
+        android:layout_toStartOf="@+id/back_btn" />
+
+    <Button
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/add_bluetooth_btn"
+        android:background="@drawable/add_x128"
+        android:layout_marginTop="17dp"
+        android:onClick=""
+        android:layout_below="@+id/create_new_btn"
+        android:layout_alignStart="@+id/create_new_btn" />
+
+
+    <Button
+        android:layout_width="500px"
+        android:layout_height="wrap_content"
+        android:text="via NFC"
+        android:id="@+id/add_NFC_btnbox"
+        android:layout_marginLeft="50dp"
+        android:onClick=""
+        android:layout_marginEnd="21dp"
+        android:layout_alignTop="@+id/add_NFC_btn"
+        android:layout_toStartOf="@+id/back_btn" />
+
+    <Button
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/add_NFC_btn"
+        android:background="@drawable/add_x128"
+        android:layout_marginTop="17dp"
+        android:onClick=""
+        android:layout_below="@+id/add_bluetooth_btn"
+        android:layout_alignStart="@+id/add_bluetooth_btn" />
+
+    <Button
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/home_btn"
+        android:background="@drawable/home_button"
+        android:layout_marginTop="500dp"
+        android:layout_centerHorizontal="true"
+        android:onClick="showHomeScreen"/>
+
+</RelativeLayout>
+
+
+
