@@ -39,7 +39,7 @@ public class AddCardActivity extends AppCompatActivity {
     }
 
     public void createNewCard(View view){
-        Intent createNewCardIntent = new Intent(this,EditMyCardActivity.class);
+        Intent createNewCardIntent = new Intent(this,EditCardActivity.class);
         startActivity(createNewCardIntent);
     }
 }

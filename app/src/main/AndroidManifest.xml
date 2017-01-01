@@ -18,8 +18,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MyCardActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".EditMyCardActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ShowCardActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".EditCardActivity" android:screenOrientation="portrait"/>
         <activity android:name=".CardsListActivity" android:screenOrientation="portrait"/>
         <activity android:name=".AddCardActivity" android:screenOrientation="portrait"/>
 

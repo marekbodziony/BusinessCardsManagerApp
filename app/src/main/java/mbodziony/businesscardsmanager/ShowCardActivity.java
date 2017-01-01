@@ -9,11 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MyCardActivity extends AppCompatActivity {
+public class ShowCardActivity extends AppCompatActivity {
 
     private Card myCard;
-    private Card myCard1;
-    private Intent editMyCardIntent;
+    private Intent cardIntent;
 
     private long id;
     private ImageView logo;
@@ -75,13 +74,13 @@ public class MyCardActivity extends AppCompatActivity {
         otherTxt = (TextView)findViewById(R.id.myCard_otherTxt);
         other = (TextView)findViewById(R.id.myCard_otherVal);
 
+
         // Card object for testing
         myCard = new Card(null,"Jan Kowalski","500-100-100","022 512-00-90","343434553","marek@gmail.com","www.google.pl","Google inc.",
-              "Warszawa, ul. Chłodna 13","IT developer","marekFacebook","marek@tweeter","marekSkype","other informations");
-//        myCard1 = new Card(null,"Jan Kowalski","500-100-100","","","marek@gmail.com","www.google.pl","Google inc.",
-//                "Warszawa, ul. Chłodna 13","IT developer","marekFacebook","","","other informations");
+                "Warszawa, ul. Chłodna 13","IT developer","marekFacebook","marek@tweeter","marekSkype","other informations");
 
-        // set values of Card object (and hide empty fields)
+
+        // set values of Card object taken from Intent (and hide empty fields)
         setMyCardValues();
     }
 
@@ -91,22 +90,22 @@ public class MyCardActivity extends AppCompatActivity {
     }
     // edit MyCard
     public void editMyCard(View view){
-        editMyCardIntent = new Intent(this, EditMyCardActivity.class);
+        cardIntent = new Intent(this, EditCardActivity.class);
         putCardInfoToIntent();
-        startActivity(editMyCardIntent);
+        startActivity(cardIntent);
     }
 
     // private method to set all values of MyCard
     private void setMyCardValues(){
-        editMyCardIntent = getIntent();
+        cardIntent = getIntent();
         //if user edited Card or create new Card then take values from Intent
-        if (editMyCardIntent != null && editMyCardIntent.getIntExtra("save",0) == 1){
+        if (cardIntent != null && cardIntent.getStringExtra("action").equals("cardFromList")){
 
-            myCard = new Card(editMyCardIntent.getStringExtra("logo_path"), editMyCardIntent.getStringExtra("name"), editMyCardIntent.getStringExtra("mobile"), editMyCardIntent.getStringExtra("phone"),
-                    editMyCardIntent.getStringExtra("fax"), editMyCardIntent.getStringExtra("email"), editMyCardIntent.getStringExtra("web"),
-                    editMyCardIntent.getStringExtra("company"), editMyCardIntent.getStringExtra("address"), editMyCardIntent.getStringExtra("job"),
-                    editMyCardIntent.getStringExtra("facebook"), editMyCardIntent.getStringExtra("tweeter"), editMyCardIntent.getStringExtra("skype"),
-                    editMyCardIntent.getStringExtra("other"));
+            myCard = new Card(cardIntent.getStringExtra("logoPath"), cardIntent.getStringExtra("name"), cardIntent.getStringExtra("mobile"), cardIntent.getStringExtra("phone"),
+                    cardIntent.getStringExtra("fax"), cardIntent.getStringExtra("email"), cardIntent.getStringExtra("web"),
+                    cardIntent.getStringExtra("company"), cardIntent.getStringExtra("address"), cardIntent.getStringExtra("job"),
+                    cardIntent.getStringExtra("facebook"), cardIntent.getStringExtra("tweeter"), cardIntent.getStringExtra("skype"),
+                    cardIntent.getStringExtra("other"));
             logo.setImageURI(Uri.parse(myCard.getLogoImgPath()));
         }
         name.setText(myCard.getName());
@@ -123,8 +122,7 @@ public class MyCardActivity extends AppCompatActivity {
         skype.setText(myCard.getSkype());
         other.setText(myCard.getOther());
 
-        // hide empty fields
-        hideEmptyFields();
+        hideEmptyFields();          // hide empty fields
     }
 
     // private method fos hiding MyCard empty fields
@@ -181,20 +179,21 @@ public class MyCardActivity extends AppCompatActivity {
 
     // private method put MyCard data (fields) to Intent object
     private void putCardInfoToIntent(){
-        editMyCardIntent.putExtra("id",myCard.getId());
-        editMyCardIntent.putExtra("logo_path",myCard.getLogoImgPath());
-        editMyCardIntent.putExtra("name",myCard.getName());
-        editMyCardIntent.putExtra("mobile",myCard.getMobile());
-        editMyCardIntent.putExtra("phone",myCard.getMobile());
-        editMyCardIntent.putExtra("fax",myCard.getFax());
-        editMyCardIntent.putExtra("email",myCard.getEmail());
-        editMyCardIntent.putExtra("web",myCard.getWeb());
-        editMyCardIntent.putExtra("company",myCard.getCompany());
-        editMyCardIntent.putExtra("address",myCard.getAddress());
-        editMyCardIntent.putExtra("job",myCard.getJob());
-        editMyCardIntent.putExtra("facebook",myCard.getFacebook());
-        editMyCardIntent.putExtra("tweeter",myCard.getTweeter());
-        editMyCardIntent.putExtra("skype",myCard.getSkype());
-        editMyCardIntent.putExtra("other",myCard.getOther());
+        cardIntent.putExtra("action","edit");
+        cardIntent.putExtra("id",myCard.getId());
+        cardIntent.putExtra("logoPath",myCard.getLogoImgPath());
+        cardIntent.putExtra("name",myCard.getName());
+        cardIntent.putExtra("mobile",myCard.getMobile());
+        cardIntent.putExtra("phone",myCard.getMobile());
+        cardIntent.putExtra("fax",myCard.getFax());
+        cardIntent.putExtra("email",myCard.getEmail());
+        cardIntent.putExtra("web",myCard.getWeb());
+        cardIntent.putExtra("company",myCard.getCompany());
+        cardIntent.putExtra("address",myCard.getAddress());
+        cardIntent.putExtra("job",myCard.getJob());
+        cardIntent.putExtra("facebook",myCard.getFacebook());
+        cardIntent.putExtra("tweeter",myCard.getTweeter());
+        cardIntent.putExtra("skype",myCard.getSkype());
+        cardIntent.putExtra("other",myCard.getOther());
     }
 }

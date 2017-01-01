@@ -1,9 +1,7 @@
 package mbodziony.businesscardsmanager;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,9 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.File;
-
-public class EditMyCardActivity extends AppCompatActivity {
+public class EditCardActivity extends AppCompatActivity {
 
     private Button cancel;
     private Button save;
@@ -38,17 +34,17 @@ public class EditMyCardActivity extends AppCompatActivity {
     private EditText skype;
     private EditText other;
 
-    private Card myCard;
-    private Intent myCardIntent;
+    //private Card myCard;
+    private Intent editCardIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_my_card);
 
-        myCardIntent = getIntent();
+        editCardIntent = getIntent();
 
-        id = myCardIntent.getLongExtra("id",0);
+        id = editCardIntent.getLongExtra("id",0);
         logo = (ImageView)findViewById(R.id.myCard_logo);
         name = (EditText)findViewById(R.id.myCard_nameVal);
         mobile = (EditText)findViewById(R.id.myCard_mobileVal);
@@ -71,38 +67,38 @@ public class EditMyCardActivity extends AppCompatActivity {
         photo = (Button)findViewById(R.id.takePhotoBtn);
     }
 
-    // get card info from Intent object
+    // get card info from Intent object and display on screen
     public void getCardInfoFromIntent(){
 
-        if (myCardIntent.getStringExtra("logo_path") != null){
-            logoImgPath = myCardIntent.getStringExtra("logo_path");
+        if (editCardIntent.getStringExtra("logoPath") != null){
+            logoImgPath = editCardIntent.getStringExtra("logoPath");
             logo.setImageURI(Uri.parse(logoImgPath));
         }
-        name.setText(myCardIntent.getStringExtra("name"));
+        name.setText(editCardIntent.getStringExtra("name"));
         name.setHint("");
-        mobile.setText(myCardIntent.getStringExtra("mobile"));
+        mobile.setText(editCardIntent.getStringExtra("mobile"));
         mobile.setHint("");
-        phone.setText(myCardIntent.getStringExtra("phone"));
+        phone.setText(editCardIntent.getStringExtra("phone"));
         phone.setHint("");
-        fax.setText(myCardIntent.getStringExtra("fax"));
+        fax.setText(editCardIntent.getStringExtra("fax"));
         fax.setHint("");
-        email.setText(myCardIntent.getStringExtra("email"));
+        email.setText(editCardIntent.getStringExtra("email"));
         email.setHint("");
-        web.setText(myCardIntent.getStringExtra("web"));
+        web.setText(editCardIntent.getStringExtra("web"));
         web.setHint("");
-        company.setText(myCardIntent.getStringExtra("company"));
+        company.setText(editCardIntent.getStringExtra("company"));
         company.setHint("");
-        address.setText(myCardIntent.getStringExtra("address"));
+        address.setText(editCardIntent.getStringExtra("address"));
         address.setHint("");
-        job.setText(myCardIntent.getStringExtra("job"));
+        job.setText(editCardIntent.getStringExtra("job"));
         job.setHint("");
-        facebook.setText(myCardIntent.getStringExtra("facebook"));
+        facebook.setText(editCardIntent.getStringExtra("facebook"));
         facebook.setHint("");
-        tweeter.setText(myCardIntent.getStringExtra("tweeter"));
+        tweeter.setText(editCardIntent.getStringExtra("tweeter"));
         tweeter.setHint("");
-        skype.setText(myCardIntent.getStringExtra("skype"));
+        skype.setText(editCardIntent.getStringExtra("skype"));
         skype.setHint("");
-        other.setText(myCardIntent.getStringExtra("other"));
+        other.setText(editCardIntent.getStringExtra("other"));
         other.setHint("");
     }
 
@@ -113,10 +109,27 @@ public class EditMyCardActivity extends AppCompatActivity {
     }
     // save
     public void save(View view){
-        Toast.makeText(getApplicationContext(),"SAVED",Toast.LENGTH_SHORT).show();
-        myCardIntent.setClass(this,MyCardActivity.class);
+
+        if (!isCardReadyToSave()) return;   // check if fields name and/or mobile phone are not empty
+
+        editCardIntent.setClass(this,CardsListActivity.class);
         putCardInfoToIntent();
-        startActivity(myCardIntent);
+
+        startActivity(editCardIntent);
+    }
+
+    // method checks if name and/or mobile phone are not empty
+    private boolean isCardReadyToSave(){
+        boolean isReadyToSave = true;
+        if (name.length() == 0) {
+            Toast.makeText(getApplicationContext(),"Nie podano nazwiska",Toast.LENGTH_SHORT).show();
+            isReadyToSave = false;
+        }
+        if (mobile.length() == 0 ) {
+            Toast.makeText(getApplicationContext(),"Nie podano telefonu komórkowego",Toast.LENGTH_SHORT).show();
+            isReadyToSave = false;
+        }
+        return isReadyToSave;
     }
 
 
@@ -148,21 +161,21 @@ public class EditMyCardActivity extends AppCompatActivity {
 
     // private method put MyCard data (fields) to Intent object
     private void putCardInfoToIntent(){
-        myCardIntent.putExtra("save",1);    // indicates that intent came from Card edition Activity
-        myCardIntent.putExtra("id",id);
-        myCardIntent.putExtra("logo_path",""+logoImgPath);
-        myCardIntent.putExtra("name",""+name.getText());
-        myCardIntent.putExtra("mobile",""+mobile.getText());
-        myCardIntent.putExtra("phone",""+phone.getText());
-        myCardIntent.putExtra("fax",""+fax.getText());
-        myCardIntent.putExtra("email",""+email.getText());
-        myCardIntent.putExtra("web",""+web.getText());
-        myCardIntent.putExtra("company",""+company.getText());
-        myCardIntent.putExtra("address",""+address.getText());
-        myCardIntent.putExtra("job",""+job.getText());
-        myCardIntent.putExtra("facebook",""+facebook.getText());
-        myCardIntent.putExtra("tweeter",""+tweeter.getText());
-        myCardIntent.putExtra("skype",""+skype.getText());
-        myCardIntent.putExtra("other",""+other.getText());
+        editCardIntent.putExtra("action","new");    // 'new' - add new Card, 'edit' - edit existing Card
+        editCardIntent.putExtra("id",id);
+        editCardIntent.putExtra("logoPath",""+logoImgPath);
+        editCardIntent.putExtra("name",""+name.getText());
+        editCardIntent.putExtra("mobile",""+mobile.getText());
+        editCardIntent.putExtra("phone",""+phone.getText());
+        editCardIntent.putExtra("fax",""+fax.getText());
+        editCardIntent.putExtra("email",""+email.getText());
+        editCardIntent.putExtra("web",""+web.getText());
+        editCardIntent.putExtra("company",""+company.getText());
+        editCardIntent.putExtra("address",""+address.getText());
+        editCardIntent.putExtra("job",""+job.getText());
+        editCardIntent.putExtra("facebook",""+facebook.getText());
+        editCardIntent.putExtra("tweeter",""+tweeter.getText());
+        editCardIntent.putExtra("skype",""+skype.getText());
+        editCardIntent.putExtra("other",""+other.getText());
     }
 }

@@ -33,7 +33,7 @@ public class CardsAdapter extends ArrayAdapter<Card> {
         TextView mobile = (TextView) rowView.findViewById(R.id.mobileVal);
 
         name.setText(cardsList.get(position).getName());
-        mobile.setText(cardsList.get(position).getPhone());
+        mobile.setText(cardsList.get(position).getMobile());
 
         return rowView;
     }

@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/mobileTxt"
-        android:text="Phone : "
+        android:text="Mobile : "
         android:layout_toRightOf="@id/myCard_logo"
         android:layout_below="@id/nameTxt"/>
     <TextView
