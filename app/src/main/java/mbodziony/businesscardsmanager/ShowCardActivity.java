@@ -76,8 +76,8 @@ public class ShowCardActivity extends AppCompatActivity {
 
 
         // Card object for testing
-        myCard = new Card(null,"Jan Kowalski","500-100-100","022 512-00-90","343434553","marek@gmail.com","www.google.pl","Google inc.",
-                "Warszawa, ul. Chłodna 13","IT developer","marekFacebook","marek@tweeter","marekSkype","other informations");
+//        myCard = new Card(null,"Jan Kowalski","500-100-100","022 512-00-90","343434553","marek@gmail.com","www.google.pl","Google inc.",
+//                "Warszawa, ul. Chłodna 13","IT developer","marekFacebook","marek@tweeter","marekSkype","other informations");
 
 
         // set values of Card object taken from Intent (and hide empty fields)
@@ -95,11 +95,11 @@ public class ShowCardActivity extends AppCompatActivity {
         startActivity(cardIntent);
     }
 
-    // private method to set all values of MyCard
+    // private method to set all values of MyCard taken from Intent
     private void setMyCardValues(){
         cardIntent = getIntent();
         //if user edited Card or create new Card then take values from Intent
-        if (cardIntent != null && cardIntent.getStringExtra("action").equals("cardFromList")){
+        //if (cardIntent != null && cardIntent.getStringExtra("action").equals("cardFromList")){
 
             myCard = new Card(cardIntent.getStringExtra("logoPath"), cardIntent.getStringExtra("name"), cardIntent.getStringExtra("mobile"), cardIntent.getStringExtra("phone"),
                     cardIntent.getStringExtra("fax"), cardIntent.getStringExtra("email"), cardIntent.getStringExtra("web"),
@@ -108,7 +108,7 @@ public class ShowCardActivity extends AppCompatActivity {
                     cardIntent.getStringExtra("other"));
             myCard.setId(cardIntent.getLongExtra("id",0));
             logo.setImageURI(Uri.parse(myCard.getLogoImgPath()));
-        }
+        //}
         name.setText(myCard.getName());
         mobile.setText(myCard.getMobile());
         phone.setText(myCard.getPhone());

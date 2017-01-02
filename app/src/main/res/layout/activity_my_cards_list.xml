@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_my_cards_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="mbodziony.businesscardsmanager.MyCardsListActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/no_cards_on_list"
+        android:text="Brak wizytówek"
+        android:textSize="30sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="180dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/no_cards_add_new"
+        android:text="Aby utworzyć nową wizytówkę kliknij (+)"
+        android:layout_below="@id/no_cards_on_list"
+        android:layout_marginTop="60dp"
+        android:layout_centerHorizontal="true"
+        />
+    <Button
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="@drawable/add_x128"
+        android:layout_below="@id/no_cards_add_new"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:onClick="createNewMyCard"/>
+
+</RelativeLayout>

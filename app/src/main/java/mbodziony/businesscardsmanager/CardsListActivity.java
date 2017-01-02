@@ -73,7 +73,7 @@ public class CardsListActivity extends AppCompatActivity {
         // edit Card details in database
         else if (cardIntent.getStringExtra("action").equals("edit")){
             dbManager.updateCard("cards",card);
-            Toast.makeText(getApplicationContext(),"Edit Card",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"Card edited",Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -25,7 +25,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     public void showMyCard(View view){
-        Intent showMyCardActivity = new Intent(this,ShowCardActivity.class);
+        Intent showMyCardActivity = new Intent(this,MyCardsListActivity.class);
         showMyCardActivity.putExtra("action","myCard");
         startActivity(showMyCardActivity);
     }

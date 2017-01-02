@@ -112,7 +112,12 @@ public class EditCardActivity extends AppCompatActivity {
 
         if (!isCardReadyToSave()) return;   // check if fields name and/or mobile phone are not empty
 
-        editCardIntent.setClass(this,CardsListActivity.class);
+        if (editCardIntent.getStringExtra("action").equals("new") || editCardIntent.getStringExtra("action").equals("edit")){
+            editCardIntent.setClass(this,CardsListActivity.class);
+        }
+        else if (editCardIntent.getStringExtra("action").equals("newMyCard") || editCardIntent.getStringExtra("action").equals("editMyCard")){
+            editCardIntent.setClass(this,MyCardsListActivity.class);
+        }
         putCardInfoToIntent();
         startActivity(editCardIntent);
     }
@@ -160,7 +165,6 @@ public class EditCardActivity extends AppCompatActivity {
 
     // private method put MyCard data (fields) to Intent object
     private void putCardInfoToIntent(){
-        //editCardIntent.putExtra("action","new");    // 'new' - add new Card, 'edit' - edit existing Card
         editCardIntent.putExtra("id",id);
         editCardIntent.putExtra("logoPath",""+logoImgPath);
         editCardIntent.putExtra("name",""+name.getText());
