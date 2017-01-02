@@ -114,7 +114,6 @@ public class EditCardActivity extends AppCompatActivity {
 
         editCardIntent.setClass(this,CardsListActivity.class);
         putCardInfoToIntent();
-
         startActivity(editCardIntent);
     }
 
@@ -161,7 +160,7 @@ public class EditCardActivity extends AppCompatActivity {
 
     // private method put MyCard data (fields) to Intent object
     private void putCardInfoToIntent(){
-        editCardIntent.putExtra("action","new");    // 'new' - add new Card, 'edit' - edit existing Card
+        //editCardIntent.putExtra("action","new");    // 'new' - add new Card, 'edit' - edit existing Card
         editCardIntent.putExtra("id",id);
         editCardIntent.putExtra("logoPath",""+logoImgPath);
         editCardIntent.putExtra("name",""+name.getText());

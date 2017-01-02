@@ -106,6 +106,7 @@ public class ShowCardActivity extends AppCompatActivity {
                     cardIntent.getStringExtra("company"), cardIntent.getStringExtra("address"), cardIntent.getStringExtra("job"),
                     cardIntent.getStringExtra("facebook"), cardIntent.getStringExtra("tweeter"), cardIntent.getStringExtra("skype"),
                     cardIntent.getStringExtra("other"));
+            myCard.setId(cardIntent.getLongExtra("id",0));
             logo.setImageURI(Uri.parse(myCard.getLogoImgPath()));
         }
         name.setText(myCard.getName());

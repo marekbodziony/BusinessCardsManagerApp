@@ -52,17 +52,21 @@ public class CardsListActivity extends AppCompatActivity {
     // save new Card or edit Card details in database
     private void saveCardInDatabase(){
         cardIntent = getIntent();
+
+        Card card = new Card(cardIntent.getStringExtra("logoPath"),cardIntent.getStringExtra("name"),cardIntent.getStringExtra("mobile"),
+                cardIntent.getStringExtra("phone"),cardIntent.getStringExtra("fax"),cardIntent.getStringExtra("email"),cardIntent.getStringExtra("web"),
+                cardIntent.getStringExtra("company"),cardIntent.getStringExtra("address"),cardIntent.getStringExtra("job"),
+                cardIntent.getStringExtra("facebook"),cardIntent.getStringExtra("tweeter"),cardIntent.getStringExtra("skype"),
+                cardIntent.getStringExtra("other"));
+        card.setId(cardIntent.getLongExtra("id",0));
         // add new Card to database
         if (cardIntent.getStringExtra("action").equals("new")){
-            dbManager.insertNewCard("cards",cardIntent.getStringExtra("logoPath"),cardIntent.getStringExtra("name"),cardIntent.getStringExtra("mobile"),
-                    cardIntent.getStringExtra("phone"),cardIntent.getStringExtra("fax"),cardIntent.getStringExtra("email"),cardIntent.getStringExtra("web"),
-                    cardIntent.getStringExtra("company"),cardIntent.getStringExtra("address"),cardIntent.getStringExtra("job"),
-                    cardIntent.getStringExtra("facebook"),cardIntent.getStringExtra("tweeter"),cardIntent.getStringExtra("skype"),
-                    cardIntent.getStringExtra("other"));
+            dbManager.insertNewCard("cards",card);
             Toast.makeText(getApplicationContext(),"Card SAVED",Toast.LENGTH_SHORT).show();
         }
         // edit Card details in database
         else if (cardIntent.getStringExtra("action").equals("edit")){
+            dbManager.updateCard("cards",card);
             Toast.makeText(getApplicationContext(),"Edit Card",Toast.LENGTH_SHORT).show();
         }
     }
@@ -70,7 +74,6 @@ public class CardsListActivity extends AppCompatActivity {
     // method gets all Cards from database and populate cards list
     private void getCardsFromDatabase(){
         Cursor cardCursor = dbManager.getAllCardsFromDB("cards");
-        int i = 1;
         if (cardCursor != null) {
             cardCursor.moveToFirst();
             Toast.makeText(getApplicationContext(),"Records in DB = " + cardCursor.getCount(),Toast.LENGTH_SHORT).show();

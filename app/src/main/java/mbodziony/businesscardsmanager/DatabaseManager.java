@@ -62,26 +62,44 @@ public class DatabaseManager {
         Toast.makeText(context,"Connection to DB is closed",Toast.LENGTH_SHORT).show();
     }
 
-    // insert new card into database
-    public long insertNewCard(String table, String logoImgPath, String name, String mobile, String phone, String fax, String email, String web, String company,
-                              String address, String job, String facebook, String tweeter, String skype, String other){
+    // insert new Card into database
+    public boolean insertNewCard(String table, Card card){
+        ContentValues newCardValues = new ContentValues();
+        newCardValues.put("logoPath",card.getLogoImgPath());
+        newCardValues.put("name",card.getName());
+        newCardValues.put("mobile",card.getMobile());
+        newCardValues.put("phone",card.getPhone());
+        newCardValues.put("fax",card.getFax());
+        newCardValues.put("email",card.getEmail());
+        newCardValues.put("web",card.getWeb());
+        newCardValues.put("address",card.getAddress());
+        newCardValues.put("job",card.getJob());
+        newCardValues.put("facebook",card.getFacebook());
+        newCardValues.put("tweeter",card.getTweeter());
+        newCardValues.put("skype",card.getSkype());
+        newCardValues.put("other",card.getOther());
 
-        ContentValues newCard = new ContentValues();
-        newCard.put("logoPath",logoImgPath);
-        newCard.put("name",name);
-        newCard.put("mobile",mobile);
-        newCard.put("phone",phone);
-        newCard.put("fax",fax);
-        newCard.put("email",email);
-        newCard.put("web",web);
-        newCard.put("address",address);
-        newCard.put("job",job);
-        newCard.put("facebook",facebook);
-        newCard.put("tweeter",tweeter);
-        newCard.put("skype",skype);
-        newCard.put("other",other);
+        return db.insert(table,null,newCardValues) > 0;
+    }
 
-        return db.insert(table,null,newCard);
+    // update Card element in database
+    public boolean updateCard(String table, Card card){
+        ContentValues updateCardValues = new ContentValues();
+        updateCardValues.put("logoPath",card.getLogoImgPath());
+        updateCardValues.put("name",card.getName());
+        updateCardValues.put("mobile",card.getMobile());
+        updateCardValues.put("phone",card.getPhone());
+        updateCardValues.put("fax",card.getFax());
+        updateCardValues.put("email",card.getEmail());
+        updateCardValues.put("web",card.getWeb());
+        updateCardValues.put("address",card.getAddress());
+        updateCardValues.put("job",card.getJob());
+        updateCardValues.put("facebook",card.getFacebook());
+        updateCardValues.put("tweeter",card.getTweeter());
+        updateCardValues.put("skype",card.getSkype());
+        updateCardValues.put("other",card.getOther());
+
+        return db.update(table,updateCardValues,"id = " + card.getId(),null) > 0;
     }
 
     // get all cards from database (from specific table)
