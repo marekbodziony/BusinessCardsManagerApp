@@ -4,6 +4,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -41,12 +45,14 @@ public class CardsListActivity extends AppCompatActivity {
         cardsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
-
                 Card card = cardList.get(pos);
                 //Toast.makeText(getApplicationContext(),card.getName(),Toast.LENGTH_SHORT).show();
                 showSelectedCard(card);
             }
         });
+
+        // add context popup menu to DateCounter list
+        registerForContextMenu(cardsListView);
     }
 
     // save new Card or edit Card details in database
@@ -104,7 +110,7 @@ public class CardsListActivity extends AppCompatActivity {
 
     }
 
-    // show selected Card (go to ShowcardActivity)
+    // show selected Card (go to ShowCardActivity)
     private void showSelectedCard(Card card){
         Intent showCardIntent = new Intent(this,ShowCardActivity.class);
         showCardIntent.putExtra("action","cardFromList");
@@ -125,10 +131,70 @@ public class CardsListActivity extends AppCompatActivity {
         showCardIntent.putExtra("other",""+card.getOther());
         startActivity(showCardIntent);
     }
+    // edit selected Card (go to EditCardActivity)
+    private void editSelectedCard(Card card){
+        Intent editCardIntent = new Intent(this,EditCardActivity.class);
+        editCardIntent.putExtra("action","edit");
+        editCardIntent.putExtra("id",card.getId());
+        editCardIntent.putExtra("logoPath",""+card.getLogoImgPath());
+        editCardIntent.putExtra("name",""+card.getName());
+        editCardIntent.putExtra("mobile",""+card.getMobile());
+        editCardIntent.putExtra("phone",""+card.getPhone());
+        editCardIntent.putExtra("fax",""+card.getFax());
+        editCardIntent.putExtra("email",""+card.getEmail());
+        editCardIntent.putExtra("web",""+card.getWeb());
+        editCardIntent.putExtra("company",""+card.getCompany());
+        editCardIntent.putExtra("address",""+card.getAddress());
+        editCardIntent.putExtra("job",""+card.getJob());
+        editCardIntent.putExtra("facebook",""+card.getFacebook());
+        editCardIntent.putExtra("tweeter",""+card.getTweeter());
+        editCardIntent.putExtra("skype",""+card.getSkype());
+        editCardIntent.putExtra("other",""+card.getOther());
+        startActivity(editCardIntent);
+    }
 
     @Override
     public void onDestroy(){
         if (dbManager != null) dbManager.close();   // close connection to database
         super.onDestroy();
+    }
+
+    // create a popup menu, it will be displayed when user long press item on a list
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.popup_menu, menu);
+
+    }
+
+
+    // what to do when user click one of popup menu items
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int i = (int)info.id;
+        long id = cardList.get(i).getId();
+
+        switch (item.getItemId()) {
+            // show selected Card (go to ShowCardActivity)
+            case R.id.menu_show:
+                showSelectedCard(cardList.get(i));
+                return true;
+            // edit selected Card (go to EditCardActivity)
+            case R.id.menu_edit:
+                editSelectedCard(cardList.get(i));
+                return true;
+            // delete selected Card
+            case R.id.menu_delete:
+                dbManager.deleteCard("cards",cardList.get(i).getId());
+                cardList.remove(i);
+                cardsListView.setAdapter(cardsAdapter);
+                Toast.makeText(getApplicationContext(),"Card deleted!",Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 }

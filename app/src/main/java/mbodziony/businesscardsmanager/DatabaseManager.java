@@ -102,6 +102,12 @@ public class DatabaseManager {
         return db.update(table,updateCardValues,"id = " + card.getId(),null) > 0;
     }
 
+    // delete Card element from database
+    public boolean deleteCard(String table, long id){
+
+        return db.delete(table,"id = " + id,null) > 0;
+    }
+
     // get all cards from database (from specific table)
     public Cursor getAllCardsFromDB(String table){
 
