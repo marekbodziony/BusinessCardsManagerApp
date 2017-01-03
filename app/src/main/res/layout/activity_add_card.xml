@@ -15,12 +15,13 @@
         android:layout_height="70dp"
         android:id="@+id/back_btn"
         android:layout_alignParentRight="true"
-        android:background="@drawable/back_button"/>
+        android:background="@drawable/back_button"
+        android:visibility="invisible"/>
 
     <Button
         android:layout_width="500px"
         android:layout_height="wrap_content"
-        android:text="create new"
+        android:text="     create new"
         android:id="@+id/create_new_btnbox"
         android:layout_marginLeft="50dp"
         android:onClick="createNewCard"
@@ -88,6 +89,5 @@
 
 
 </RelativeLayout>
-
 
 

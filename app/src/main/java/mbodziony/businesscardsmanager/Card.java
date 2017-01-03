@@ -28,7 +28,6 @@ public class Card {
     // constructor
     public Card (String logoImgPath, String name, String mobile, String phone, String fax, String email, String web, String company,
                  String address, String job, String facebook, String tweeter, String skype, String other){
-        this.logo = logo;
         this.logoImgPath = logoImgPath;
         this.name = name;
         this.mobile = mobile;

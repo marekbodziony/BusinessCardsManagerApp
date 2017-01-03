@@ -21,7 +21,7 @@ public class AddCardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_screen);
+        setContentView(R.layout.activity_add_card);
 
         home = (Button)findViewById(R.id.home_btn);
         back = (Button)findViewById(R.id.back_btn);
@@ -34,12 +34,13 @@ public class AddCardActivity extends AppCompatActivity {
     }
 
     public void showHomeScreen (View view){
-        Intent showHomeScreenActivity = new Intent(this,WelcomeActivity.class);
+        Intent showHomeScreenActivity = new Intent(this,WelcomeActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(showHomeScreenActivity);
     }
 
     public void createNewCard(View view){
-        Intent createNewCardIntent = new Intent(this,EditMyCardActivity.class);
+        Intent createNewCardIntent = new Intent(this,EditCardActivity.class);
+        createNewCardIntent.putExtra("action","new");
         startActivity(createNewCardIntent);
     }
 }

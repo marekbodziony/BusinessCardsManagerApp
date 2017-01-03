@@ -25,12 +25,14 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     public void showMyCard(View view){
-        Intent showMyCardActivity = new Intent(this,MyCardActivity.class);
+        Intent showMyCardActivity = new Intent(this,MyCardsListActivity.class);
+        showMyCardActivity.putExtra("action","myCard");
         startActivity(showMyCardActivity);
     }
     //
     public void showCardsList(View view){
         Intent showCardsListActivity = new Intent(this,CardsListActivity.class);
+        showCardsListActivity.putExtra("action","list");
         startActivity(showCardsListActivity);
     }
 
@@ -40,7 +42,12 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     public void turnOff (View view) {
+
         finish();
     }
+
+    // when "back" button is pressed do nothing
+    @Override
+    public void onBackPressed(){}
 
 }
