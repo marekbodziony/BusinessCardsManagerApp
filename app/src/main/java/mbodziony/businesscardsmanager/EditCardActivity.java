@@ -70,11 +70,15 @@ public class EditCardActivity extends AppCompatActivity {
     // get card info from Intent object and display on screen
     public void getCardInfoFromIntent(){
 
-        if (!editCardIntent.getStringExtra("logoPath").equals("null")){
-            logoImgPath = editCardIntent.getStringExtra("logoPath");
-            logo.setImageURI(Uri.parse(logoImgPath));
+        String logoPath = editCardIntent.getStringExtra("logoPath");
+        if (logoPath == null || logoPath.equals("null")){
+            logo.setImageResource(R.drawable.person_x311);
         }
-        else{ logo.setImageResource(R.drawable.person_x311);}
+        else {
+            logo.setImageURI(Uri.parse(editCardIntent.getStringExtra("logoPath")));
+            logoImgPath = null;
+        }
+
         name.setText(editCardIntent.getStringExtra("name"));
         name.setHint("");
         mobile.setText(editCardIntent.getStringExtra("mobile"));
@@ -150,12 +154,11 @@ public class EditCardActivity extends AppCompatActivity {
     }
     // delete logo from MyCard (set default)
     public void deleteLogo(View view){
-        //logoImgPath = null;
         logo.setImageResource(R.drawable.person_x311);
         logoImgPath = null;
     }
 
-
+    // method set logo path from selected image
     @Override
     protected void onActivityResult(int requestCode, int respondCode, Intent data){
         // set taken photo or loaded image to logo ImageView

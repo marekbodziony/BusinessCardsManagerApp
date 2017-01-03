@@ -185,7 +185,7 @@ public class ShowCardActivity extends AppCompatActivity {
         cardIntent.putExtra("logoPath",myCard.getLogoImgPath());
         cardIntent.putExtra("name",myCard.getName());
         cardIntent.putExtra("mobile",myCard.getMobile());
-        cardIntent.putExtra("phone",myCard.getMobile());
+        cardIntent.putExtra("phone",myCard.getPhone());
         cardIntent.putExtra("fax",myCard.getFax());
         cardIntent.putExtra("email",myCard.getEmail());
         cardIntent.putExtra("web",myCard.getWeb());
