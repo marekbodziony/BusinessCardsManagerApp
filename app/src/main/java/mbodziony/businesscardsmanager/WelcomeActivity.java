@@ -42,7 +42,12 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     public void turnOff (View view) {
+
         finish();
     }
+
+    // when "back" button is pressed do nothing
+    @Override
+    public void onBackPressed(){}
 
 }

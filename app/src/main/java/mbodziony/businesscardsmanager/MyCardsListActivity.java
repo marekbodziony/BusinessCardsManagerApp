@@ -7,39 +7,36 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 public class MyCardsListActivity extends AppCompatActivity {
 
     private DatabaseManager dbManager;
-    private Intent myCardIntet;
+    private Intent myCardIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_cards_list);
 
-        //myCardIntet = getIntent();
+        myCardIntent = getIntent();
 
         dbManager = new DatabaseManager(getApplicationContext());
-        dbManager.open();               // open connection to database
+        dbManager.open();                   // open connection to database
 
-        ifMyCardExistsShowIt();         // checks if there is myCard element in database, if yes it shows it (goes to ShowCardActivity)
-        saveMyCardInDatabaseIfNeeded();   //
+        serveMyCardInDatabaseIfNeeded();     // save, edit or delete myCard from database if user select specific action
+        showMyCardIfExists();               // checks if there is myCard element in database, if yes it shows it (goes to ShowCardActivity)
     }
 
     // create new myCard (go to EditCardActivity)
     public void createNewMyCard(View view){
-        myCardIntet = new Intent(this,EditCardActivity.class);
-        myCardIntet.putExtra("action","newMyCard");
-        startActivity(myCardIntet);
+        myCardIntent = new Intent(this,EditCardActivity.class);
+        myCardIntent.putExtra("action","newMyCard");
+        startActivity(myCardIntent);
     }
 
     // method checks if there is myCard element in database, if yes it shows myCard (goes to ShowCardActivity)
-    private void ifMyCardExistsShowIt(){
+    private void showMyCardIfExists(){
         Cursor cardCursor = dbManager.getAllCardsFromDB("mycards");
-        Toast.makeText(getApplicationContext(),"Records in DB  = " + cardCursor.getCount(),Toast.LENGTH_SHORT).show();
-
+        //if (cardCursor != null) Toast.makeText(getApplicationContext(),"Records in DB  = " + cardCursor.getCount(),Toast.LENGTH_SHORT).show();
         if (cardCursor != null && cardCursor.getCount() == 1){
             cardCursor.moveToFirst();
 
@@ -65,8 +62,8 @@ public class MyCardsListActivity extends AppCompatActivity {
     }
 
     // method saves myCard into database if there is need (Intent from EditCardActivity)
-    private void saveMyCardInDatabaseIfNeeded(){
-        Intent myCardIntent = getIntent();
+    private void serveMyCardInDatabaseIfNeeded(){
+        myCardIntent = getIntent();
 
         Card card = new Card(myCardIntent.getStringExtra("logoPath"),myCardIntent.getStringExtra("name"),myCardIntent.getStringExtra("mobile"),
                 myCardIntent.getStringExtra("phone"),myCardIntent.getStringExtra("fax"),myCardIntent.getStringExtra("email"),myCardIntent.getStringExtra("web"),
@@ -80,17 +77,26 @@ public class MyCardsListActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Card SAVED",Toast.LENGTH_SHORT).show();
         }
         // edit Card details in database
-        else if (myCardIntent.getStringExtra("action").equals("editMyCards")){
+        else if (myCardIntent.getStringExtra("action").equals("editMyCard")){
             dbManager.updateCard("mycards",card);
             Toast.makeText(getApplicationContext(),"Card edited",Toast.LENGTH_SHORT).show();
         }
-
-
+        // delete Card from database
+        else if (myCardIntent.getStringExtra("action").equals("delete")){
+            dbManager.deleteCard("mycards",card.getId());
+            Toast.makeText(getApplicationContext(),"Card deleted!",Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void onDestroy(){
         if (dbManager != null) dbManager.close();   // close connection to database
         super.onDestroy();
+    }
+
+    // when "back" button is pressed go back to WelcomeActivity (Main screen)
+    @Override
+    public void onBackPressed(){
+        startActivity(new Intent(this,WelcomeActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 }

@@ -40,7 +40,7 @@ public class EditCardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_my_card);
+        setContentView(R.layout.activity_edit_card);
 
         editCardIntent = getIntent();
 
@@ -70,10 +70,11 @@ public class EditCardActivity extends AppCompatActivity {
     // get card info from Intent object and display on screen
     public void getCardInfoFromIntent(){
 
-        if (editCardIntent.getStringExtra("logoPath") != null){
+        if (!editCardIntent.getStringExtra("logoPath").equals("null")){
             logoImgPath = editCardIntent.getStringExtra("logoPath");
             logo.setImageURI(Uri.parse(logoImgPath));
         }
+        else{ logo.setImageResource(R.drawable.person_x311);}
         name.setText(editCardIntent.getStringExtra("name"));
         name.setHint("");
         mobile.setText(editCardIntent.getStringExtra("mobile"));
@@ -148,9 +149,10 @@ public class EditCardActivity extends AppCompatActivity {
         startActivityForResult(loadImgIntent,1);
     }
     // delete logo from MyCard (set default)
-    private void deleteLogo(View view){
+    public void deleteLogo(View view){
         //logoImgPath = null;
         logo.setImageResource(R.drawable.person_x311);
+        logoImgPath = null;
     }
 
 

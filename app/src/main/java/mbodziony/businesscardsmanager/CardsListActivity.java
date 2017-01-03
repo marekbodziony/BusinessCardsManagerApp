@@ -4,13 +4,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.PopupMenu;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,10 +25,18 @@ public class CardsListActivity extends AppCompatActivity {
     private DatabaseManager dbManager;
     private Intent cardIntent;
 
+    private TextView noCardsTxt;
+    private TextView noCardsAddNewTxt;
+    private Button newCardBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cards_list);
+
+        noCardsTxt = (TextView)findViewById(R.id.no_cards_on_list);
+        noCardsAddNewTxt = (TextView)findViewById(R.id.no_cards_add_new);
+        newCardBtn = (Button)findViewById(R.id.no_cards_add_new_btn);
 
         cardsListView = (ListView) findViewById(R.id.cardsListView);
         cardList = new ArrayList<Card>();
@@ -35,7 +44,9 @@ public class CardsListActivity extends AppCompatActivity {
         dbManager = new DatabaseManager(getApplicationContext());
         dbManager.open();           // open connection to database
 
-        saveCardInDatabase();       // save new Card or edit Card details in databse
+        cardIntent = getIntent();   // get Intent
+
+        serveCardInDatabaseIfNeede();       // save, edit or delete Card from databse
         getCardsFromDatabase();     // get Cards list from database and populate cards list
 
 
@@ -55,9 +66,8 @@ public class CardsListActivity extends AppCompatActivity {
         registerForContextMenu(cardsListView);
     }
 
-    // save new Card or edit Card details in database
-    private void saveCardInDatabase(){
-        cardIntent = getIntent();
+    // save new Card, edit Card details or delete Card from database
+    private void serveCardInDatabaseIfNeede(){
 
         Card card = new Card(cardIntent.getStringExtra("logoPath"),cardIntent.getStringExtra("name"),cardIntent.getStringExtra("mobile"),
                 cardIntent.getStringExtra("phone"),cardIntent.getStringExtra("fax"),cardIntent.getStringExtra("email"),cardIntent.getStringExtra("web"),
@@ -75,15 +85,19 @@ public class CardsListActivity extends AppCompatActivity {
             dbManager.updateCard("cards",card);
             Toast.makeText(getApplicationContext(),"Card edited",Toast.LENGTH_SHORT).show();
         }
+        // delete Card from database
+        else if (cardIntent.getStringExtra("action").equals("delete")){
+            dbManager.deleteCard("cards",card.getId());
+            Toast.makeText(getApplicationContext(),"Card deleted!",Toast.LENGTH_SHORT).show();
+        }
     }
 
     // method gets all Cards from database and populate cards list
     private void getCardsFromDatabase(){
         Cursor cardCursor = dbManager.getAllCardsFromDB("cards");
-        if (cardCursor != null) {
+        //if (cardCursor != null) Toast.makeText(getApplicationContext(),"Records in DB = " + cardCursor.getCount(),Toast.LENGTH_SHORT).show();
+        if (cardCursor != null && cardCursor.getCount() > 0) {
             cardCursor.moveToFirst();
-            Toast.makeText(getApplicationContext(),"Records in DB = " + cardCursor.getCount(),Toast.LENGTH_SHORT).show();
-
             do{
                 long id = cardCursor.getLong(0);
                 String logoPath = cardCursor.getString(1);
@@ -106,6 +120,9 @@ public class CardsListActivity extends AppCompatActivity {
                 cardList.add(card);
             }
             while (cardCursor.moveToNext());
+        }
+        else {
+            showNoCardsInfoIfListEmpty();       // if no cards element in database display "no cards" info, show "add new" button
         }
 
     }
@@ -153,6 +170,16 @@ public class CardsListActivity extends AppCompatActivity {
         startActivity(editCardIntent);
     }
 
+    // method displays "no cards" info and shows "add new" button
+    private void showNoCardsInfoIfListEmpty(){
+
+        noCardsTxt.setVisibility(View.VISIBLE); ;
+        noCardsAddNewTxt.setVisibility(View.VISIBLE);
+        newCardBtn.setVisibility(View.VISIBLE);
+    }
+
+
+    // Close connection to database when Activity is closed - onDestroy()
     @Override
     public void onDestroy(){
         if (dbManager != null) dbManager.close();   // close connection to database
@@ -192,9 +219,23 @@ public class CardsListActivity extends AppCompatActivity {
                 cardList.remove(i);
                 cardsListView.setAdapter(cardsAdapter);
                 Toast.makeText(getApplicationContext(),"Card deleted!",Toast.LENGTH_SHORT).show();
+                if(cardList.size() == 0) showNoCardsInfoIfListEmpty();
                 return true;
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    // create new Card if user clicked (+) - go to EditCardActivity
+    public void createNewCard(View view){
+        cardIntent = new Intent(this,EditCardActivity.class);
+        cardIntent.putExtra("action","new");
+        startActivity(cardIntent);
+    }
+
+    // when "back" button is pressed go back to WelcomeActivity (Main screen)
+    @Override
+    public void onBackPressed(){
+        startActivity(new Intent(this,WelcomeActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 }

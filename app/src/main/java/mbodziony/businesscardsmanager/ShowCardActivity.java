@@ -45,7 +45,7 @@ public class ShowCardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_card);
+        setContentView(R.layout.activity_show_card);
 
         logo = (ImageView)findViewById(R.id.myCard_logo);
         name = (TextView)findViewById(R.id.myCard_nameVal);
@@ -74,23 +74,23 @@ public class ShowCardActivity extends AppCompatActivity {
         otherTxt = (TextView)findViewById(R.id.myCard_otherTxt);
         other = (TextView)findViewById(R.id.myCard_otherVal);
 
-
-        // Card object for testing
-//        myCard = new Card(null,"Jan Kowalski","500-100-100","022 512-00-90","343434553","marek@gmail.com","www.google.pl","Google inc.",
-//                "Warszawa, ul. Chłodna 13","IT developer","marekFacebook","marek@tweeter","marekSkype","other informations");
-
-
         // set values of Card object taken from Intent (and hide empty fields)
         setMyCardValues();
     }
 
     // delete MyCard
     public void deleteMyCard(View view){
-        Toast.makeText(getApplicationContext(),"DELETE",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(),"DELETE",Toast.LENGTH_SHORT).show();
+        String action = cardIntent.getStringExtra("action");
+        if (action.equals("myCard")) cardIntent.setClass(this, MyCardsListActivity.class);
+        else if (action.equals("cardFromList")) cardIntent.setClass(this, CardsListActivity.class);
+        putCardInfoToIntent();
+        cardIntent.putExtra("action","delete");     // information that Card from this Intent should be deleted in database
+        startActivity(cardIntent);
     }
     // edit MyCard
     public void editMyCard(View view){
-        cardIntent = new Intent(this, EditCardActivity.class);
+        cardIntent.setClass(this, EditCardActivity.class);
         putCardInfoToIntent();
         startActivity(cardIntent);
     }
@@ -99,16 +99,15 @@ public class ShowCardActivity extends AppCompatActivity {
     private void setMyCardValues(){
         cardIntent = getIntent();
         //if user edited Card or create new Card then take values from Intent
-        //if (cardIntent != null && cardIntent.getStringExtra("action").equals("cardFromList")){
+        myCard = new Card(cardIntent.getStringExtra("logoPath"), cardIntent.getStringExtra("name"), cardIntent.getStringExtra("mobile"), cardIntent.getStringExtra("phone"),
+                cardIntent.getStringExtra("fax"), cardIntent.getStringExtra("email"), cardIntent.getStringExtra("web"),
+                cardIntent.getStringExtra("company"), cardIntent.getStringExtra("address"), cardIntent.getStringExtra("job"),
+                cardIntent.getStringExtra("facebook"), cardIntent.getStringExtra("tweeter"), cardIntent.getStringExtra("skype"),
+                cardIntent.getStringExtra("other"));
+        myCard.setId(cardIntent.getLongExtra("id",0));
 
-            myCard = new Card(cardIntent.getStringExtra("logoPath"), cardIntent.getStringExtra("name"), cardIntent.getStringExtra("mobile"), cardIntent.getStringExtra("phone"),
-                    cardIntent.getStringExtra("fax"), cardIntent.getStringExtra("email"), cardIntent.getStringExtra("web"),
-                    cardIntent.getStringExtra("company"), cardIntent.getStringExtra("address"), cardIntent.getStringExtra("job"),
-                    cardIntent.getStringExtra("facebook"), cardIntent.getStringExtra("tweeter"), cardIntent.getStringExtra("skype"),
-                    cardIntent.getStringExtra("other"));
-            myCard.setId(cardIntent.getLongExtra("id",0));
-            logo.setImageURI(Uri.parse(myCard.getLogoImgPath()));
-        //}
+        if (myCard.getLogoImgPath().equals("null")) logo.setImageResource(R.drawable.person_x311);
+        else logo.setImageURI(Uri.parse(myCard.getLogoImgPath()));
         name.setText(myCard.getName());
         mobile.setText(myCard.getMobile());
         phone.setText(myCard.getPhone());
@@ -180,7 +179,8 @@ public class ShowCardActivity extends AppCompatActivity {
 
     // private method put MyCard data (fields) to Intent object
     private void putCardInfoToIntent(){
-        cardIntent.putExtra("action","edit");
+        if (cardIntent.getStringExtra("action").equals("myCard")) {cardIntent.putExtra("action","editMyCard");}
+        else if (cardIntent.getStringExtra("action").equals("cardFromList")) {cardIntent.putExtra("action","edit");}
         cardIntent.putExtra("id",myCard.getId());
         cardIntent.putExtra("logoPath",myCard.getLogoImgPath());
         cardIntent.putExtra("name",myCard.getName());
@@ -196,5 +196,22 @@ public class ShowCardActivity extends AppCompatActivity {
         cardIntent.putExtra("tweeter",myCard.getTweeter());
         cardIntent.putExtra("skype",myCard.getSkype());
         cardIntent.putExtra("other",myCard.getOther());
+    }
+
+    // when "back" button is pressed go back to proper Activity
+    @Override
+    public void onBackPressed(){
+        cardIntent = getIntent().setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if(cardIntent.getStringExtra("action").equals("myCard") || cardIntent.getStringExtra("action").equals("editMyCard")){
+            cardIntent.setClass(this,WelcomeActivity.class);
+        }
+        else if(cardIntent.getStringExtra("action").equals("cardFromList") || cardIntent.getStringExtra("action").equals("edit")){
+            cardIntent.setClass(this,CardsListActivity.class);
+        }
+        else{
+            Toast.makeText(getApplicationContext(),"BACK button not defined\naction="+cardIntent.getStringExtra("action"),Toast.LENGTH_SHORT).show();
+            return;
+        }
+        startActivity(cardIntent);
     }
 }

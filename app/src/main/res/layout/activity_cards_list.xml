@@ -15,4 +15,34 @@
         android:id="@+id/cardsListView">
 
     </ListView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/no_cards_on_list"
+        android:text="Brak wizytówek"
+        android:textSize="30sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="180dp"
+        android:visibility="invisible"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/no_cards_add_new"
+        android:text="Aby utworzyć nową wizytówkę kliknij (+)"
+        android:layout_below="@id/no_cards_on_list"
+        android:layout_marginTop="60dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"/>
+    <Button
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/no_cards_add_new_btn"
+        android:background="@drawable/add_x128"
+        android:layout_below="@id/no_cards_add_new"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:onClick="createNewCard"
+        android:visibility="invisible"/>
+
 </RelativeLayout>

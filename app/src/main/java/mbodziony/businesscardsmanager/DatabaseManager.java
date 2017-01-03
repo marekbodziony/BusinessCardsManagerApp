@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 public class DatabaseManager {
 
-    public static final String DEBUG_TAG = "BusinessManager";   // for finding in logs
+    public static final String DEBUG_TAG = "BusinessManager";   // for debugging (to find in logs)
 
     // SQLite database details
     public static final int DB_VERSION = 2;
@@ -72,6 +72,7 @@ public class DatabaseManager {
         newCardValues.put("fax",card.getFax());
         newCardValues.put("email",card.getEmail());
         newCardValues.put("web",card.getWeb());
+        newCardValues.put("company",card.getCompany());
         newCardValues.put("address",card.getAddress());
         newCardValues.put("job",card.getJob());
         newCardValues.put("facebook",card.getFacebook());
@@ -92,6 +93,7 @@ public class DatabaseManager {
         updateCardValues.put("fax",card.getFax());
         updateCardValues.put("email",card.getEmail());
         updateCardValues.put("web",card.getWeb());
+        updateCardValues.put("company",card.getCompany());
         updateCardValues.put("address",card.getAddress());
         updateCardValues.put("job",card.getJob());
         updateCardValues.put("facebook",card.getFacebook());

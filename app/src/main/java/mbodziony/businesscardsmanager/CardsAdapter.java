@@ -2,10 +2,12 @@ package mbodziony.businesscardsmanager;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -31,9 +33,18 @@ public class CardsAdapter extends ArrayAdapter<Card> {
 
         TextView name = (TextView) rowView.findViewById(R.id.nameVal);
         TextView mobile = (TextView) rowView.findViewById(R.id.mobileVal);
+        ImageView logo = (ImageView) rowView.findViewById(R.id.myCard_logo);
 
         name.setText(cardsList.get(position).getName());
         mobile.setText(cardsList.get(position).getMobile());
+
+        String logoPath = cardsList.get(position).getLogoImgPath();
+        if (!logoPath.equals("null")) {
+            logo.setImageURI(Uri.parse(logoPath));
+        }
+        else{
+            logo.setImageResource(R.drawable.person_x311);
+        }
 
         return rowView;
     }

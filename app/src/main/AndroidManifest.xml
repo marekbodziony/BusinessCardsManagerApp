@@ -27,17 +27,22 @@
         </activity>
         <activity
             android:name=".ShowCardActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".WelcomeActivity"/>
         <activity
             android:name=".EditCardActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".WelcomeActivity"/>
         <activity
             android:name=".CardsListActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".WelcomeActivity"/>
         <activity
             android:name=".AddCardActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".MyCardsListActivity"></activity>
+        <activity android:name=".MyCardsListActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".WelcomeActivity"/>/>
     </application>
 
 </manifest>
