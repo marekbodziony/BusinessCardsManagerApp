@@ -324,7 +324,7 @@
         <Button
             android:layout_width="128px"
             android:layout_height="128px"
-            android:background="@drawable/trash_x124"
+            android:background="@drawable/delete_x128"
             android:id="@+id/deleteLogoBtn"
             android:layout_toRightOf="@id/myCard_logo"
             android:onClick="deleteLogo"/>
