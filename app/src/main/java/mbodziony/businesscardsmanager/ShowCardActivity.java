@@ -214,4 +214,9 @@ public class ShowCardActivity extends AppCompatActivity {
         }
         startActivity(cardIntent);
     }
+
+    // share Card with other Android devices
+    public void shareCard(View view){
+        Toast.makeText(this,"Share",Toast.LENGTH_SHORT).show();
+    }
 }
