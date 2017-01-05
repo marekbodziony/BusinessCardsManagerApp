@@ -3,6 +3,7 @@ package mbodziony.businesscardsmanager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -217,6 +218,7 @@ public class ShowCardActivity extends AppCompatActivity {
 
     // share Card with other Android devices
     public void shareCard(View view){
-        Toast.makeText(this,"Share",Toast.LENGTH_SHORT).show();
+        Intent shareCardIntent = new Intent(this,ShareActivity.class);
+        startActivity(shareCardIntent);
     }
 }
