@@ -23,9 +23,11 @@
         <Button
             android:layout_width="250px"
             android:layout_height="250px"
+            android:id="@+id/nfc_btn"
             android:background="@drawable/nfc"
             android:layout_toRightOf="@id/bluetooth_btn"
-            android:layout_marginLeft="60px"/>
+            android:layout_marginLeft="60px"
+            android:onClick="shareViaNfc"/>
 
     </LinearLayout>
 
