@@ -1,11 +1,13 @@
 package mbodziony.businesscardsmanager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,12 +84,25 @@ public class ShowCardActivity extends AppCompatActivity {
     // delete MyCard
     public void deleteMyCard(View view){
         //Toast.makeText(getApplicationContext(),"DELETE",Toast.LENGTH_SHORT).show();
-        String action = cardIntent.getStringExtra("action");
-        if (action.equals("myCard")) cardIntent.setClass(this, MyCardsListActivity.class);
-        else if (action.equals("cardFromList")) cardIntent.setClass(this, CardsListActivity.class);
-        putCardInfoToIntent();
-        cardIntent.putExtra("action","delete");     // information that Card from this Intent should be deleted in database
-        startActivity(cardIntent);
+        new AlertDialog.Builder(this).setTitle("Usunąć wizytówkę ?")
+                .setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String action = cardIntent.getStringExtra("action");
+                        if (action.equals("myCard")) cardIntent.setClass(getApplicationContext(), MyCardsListActivity.class);
+                        else if (action.equals("cardFromList")) cardIntent.setClass(getApplicationContext(), CardsListActivity.class);
+                        putCardInfoToIntent();
+                        cardIntent.putExtra("action","delete");     // information that Card from this Intent should be deleted in database
+                        startActivity(cardIntent);
+                    }
+                })
+                .setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        return;
+                    }
+                })
+                .show();
     }
     // edit MyCard
     public void editMyCard(View view){

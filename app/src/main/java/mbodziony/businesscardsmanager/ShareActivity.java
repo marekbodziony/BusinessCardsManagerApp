@@ -39,7 +39,7 @@ public class ShareActivity extends AppCompatActivity {
         }
         // if user choose to share Card via NFC while NFC is on - display info to tap devices together
         else {
-            Toast.makeText(this,"Tap your devices together to send Card.\nIt will start automaticly.",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Tap your devices together to send a Card.\nIt will start automaticly.",Toast.LENGTH_LONG).show();
             finish();
         }
 
@@ -55,7 +55,7 @@ public class ShareActivity extends AppCompatActivity {
     private void closeThisActivityIfDontNeed(){
         if (nfcAdapter.isEnabled() && closeShareActivity){
             closeShareActivity = false;     // don't close this Activity next time
-            Toast.makeText(this,"Tap your devices together to send Card.\nIt will start automaticly.",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Tap your devices together to send a Card.\nIt will start automaticly.",Toast.LENGTH_LONG).show();
             finish();
         }
         closeShareActivity = false;         // don't close this Activity next time

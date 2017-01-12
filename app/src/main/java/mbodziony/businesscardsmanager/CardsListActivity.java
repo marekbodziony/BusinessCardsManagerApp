@@ -1,7 +1,9 @@
 package mbodziony.businesscardsmanager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -201,7 +203,7 @@ public class CardsListActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        int i = (int)info.id;
+        final int i = (int)info.id;
         long id = cardList.get(i).getId();
 
         switch (item.getItemId()) {
@@ -215,12 +217,34 @@ public class CardsListActivity extends AppCompatActivity {
                 return true;
             // delete selected Card
             case R.id.menu_delete:
-                dbManager.deleteCard("cards",cardList.get(i).getId());
-                cardList.remove(i);
-                cardsListView.setAdapter(cardsAdapter);
-                Toast.makeText(getApplicationContext(),"Card deleted!",Toast.LENGTH_SHORT).show();
-                if(cardList.size() == 0) showNoCardsInfoIfListEmpty();
-                return true;
+
+                new AlertDialog.Builder(this).setTitle("Usunąć wizytówkę ?")
+                        .setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int j) {
+
+                                dbManager.deleteCard("cards",cardList.get(i).getId());
+                                cardList.remove(i);
+                                cardsListView.setAdapter(cardsAdapter);
+                                Toast.makeText(getApplicationContext(),"Card deleted!",Toast.LENGTH_SHORT).show();
+                                if(cardList.size() == 0) showNoCardsInfoIfListEmpty();
+                                return;
+                            }
+                        })
+                        .setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int j) {
+                                return;
+                            }
+                        })
+                        .show();
+//
+//                dbManager.deleteCard("cards",cardList.get(i).getId());
+//                cardList.remove(i);
+//                cardsListView.setAdapter(cardsAdapter);
+//                Toast.makeText(getApplicationContext(),"Card deleted!",Toast.LENGTH_SHORT).show();
+//                if(cardList.size() == 0) showNoCardsInfoIfListEmpty();
+//                return true;
             default:
                 return super.onContextItemSelected(item);
         }
