@@ -36,7 +36,8 @@
         android:id="@+id/settings_btn"
         android:background="@drawable/settings"
         android:layout_alignTop="@+id/turn_off_btn"
-        android:layout_toStartOf="@+id/turn_off_btn" />
+        android:layout_toStartOf="@+id/turn_off_btn"
+        android:onClick="showSettingsScreen"/>
 
     <Button
         android:layout_width="70dp"

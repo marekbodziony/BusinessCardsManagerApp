@@ -46,7 +46,8 @@
         <activity
             android:name=".ShareActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert"/>
+            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert" />
+        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>

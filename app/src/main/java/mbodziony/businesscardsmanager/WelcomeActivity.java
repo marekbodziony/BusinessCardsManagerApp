@@ -41,6 +41,11 @@ public class WelcomeActivity extends AppCompatActivity {
         startActivity(showEditScreenActivity);
     }
 
+    public void showSettingsScreen (View view){
+        Intent showSettingsScreenActivity = new Intent(this,SettingsActivity.class);
+        startActivity(showSettingsScreenActivity);
+    }
+
     public void turnOff (View view) {
         finish();
     }
