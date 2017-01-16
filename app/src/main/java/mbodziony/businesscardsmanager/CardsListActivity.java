@@ -93,7 +93,7 @@ public class CardsListActivity extends AppCompatActivity {
             Toast.makeText(this,"NDEF message received!",Toast.LENGTH_SHORT).show();
             card = getCardFromNdefMessage(cardIntent);  // get Card object from NDEF message
             cardIntent = new Intent();                  // Consume this intent
-            cardIntent.putExtra("action","new");        // set Intent action to "new" (new Card received via NFC)
+            cardIntent.putExtra("action","newNFC");        // set Intent action to "new" (new Card received via NFC)
         }
         // if Card details received form this application Activities
         else {
@@ -108,6 +108,12 @@ public class CardsListActivity extends AppCompatActivity {
         if (cardIntent.getStringExtra("action").equals("new")){
             dbManager.insertNewCard("cards",card);
             Toast.makeText(getApplicationContext(),"Card SAVED",Toast.LENGTH_SHORT).show();
+        }
+        // when new Card received via NFC - add new Card to database and show it (go to ShowCardActivity)
+        if (cardIntent.getStringExtra("action").equals("newNFC")){
+            dbManager.insertNewCard("cards",card);
+            Toast.makeText(getApplicationContext(),"Card SAVED",Toast.LENGTH_SHORT).show();
+            showSelectedCard(card);
         }
         // edit Card details in database
         else if (cardIntent.getStringExtra("action").equals("edit")){

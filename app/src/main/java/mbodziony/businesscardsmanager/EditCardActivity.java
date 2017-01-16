@@ -77,7 +77,6 @@ public class EditCardActivity extends AppCompatActivity {
         else {
             logoImgPath = editCardIntent.getStringExtra("logoPath");
             logo.setImageURI(Uri.parse(logoImgPath));
-            //logoImgPath = null;
         }
 
         name.setText(editCardIntent.getStringExtra("name"));
