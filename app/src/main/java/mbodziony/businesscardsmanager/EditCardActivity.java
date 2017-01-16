@@ -75,8 +75,9 @@ public class EditCardActivity extends AppCompatActivity {
             logo.setImageResource(R.drawable.person_x311);
         }
         else {
-            logo.setImageURI(Uri.parse(editCardIntent.getStringExtra("logoPath")));
-            logoImgPath = null;
+            logoImgPath = editCardIntent.getStringExtra("logoPath");
+            logo.setImageURI(Uri.parse(logoImgPath));
+            //logoImgPath = null;
         }
 
         name.setText(editCardIntent.getStringExtra("name"));

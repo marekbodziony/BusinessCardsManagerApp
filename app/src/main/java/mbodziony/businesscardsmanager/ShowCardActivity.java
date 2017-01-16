@@ -2,23 +2,28 @@ package mbodziony.businesscardsmanager;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
-import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class ShowCardActivity extends AppCompatActivity {
 
@@ -135,7 +140,7 @@ public class ShowCardActivity extends AppCompatActivity {
                 cardIntent.getStringExtra("other"));
         myCard.setId(cardIntent.getLongExtra("id",0));
 
-        if (myCard.getLogoImgPath().equals("null")) logo.setImageResource(R.drawable.person_x311);
+        if (myCard.getLogoImgPath() == null || myCard.getLogoImgPath().equals("null")) logo.setImageResource(R.drawable.person_x311);
         else logo.setImageURI(Uri.parse(myCard.getLogoImgPath()));
         name.setText(myCard.getName());
         mobile.setText(myCard.getMobile());
@@ -262,7 +267,7 @@ public class ShowCardActivity extends AppCompatActivity {
     private NdefMessage putCardContentToNdefMessage(){
 
         byte[] payload_card_details = cardToJSON(myCard).getBytes();
-        byte[] payload_card_logo = "".getBytes();
+        byte[] payload_card_logo = "null".getBytes();//logoImgToBytes(myCard);
 
         // create NDEF records and put card payload
         NdefRecord record1 = new NdefRecord(NdefRecord.TNF_WELL_KNOWN,NdefRecord.RTD_TEXT,new byte[0],payload_card_details);
@@ -276,7 +281,7 @@ public class ShowCardActivity extends AppCompatActivity {
         return  msg;
     }
 
-    // put Card information to JSON file
+    // put Card information to JSON file (later it will be converted to byte[] for sending in NDEF record payload)
     private String cardToJSON(Card card){
 
         try {

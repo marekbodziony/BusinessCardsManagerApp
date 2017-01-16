@@ -3,6 +3,8 @@ package mbodziony.businesscardsmanager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -23,6 +25,11 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -288,7 +295,7 @@ public class CardsListActivity extends AppCompatActivity {
         // if there will be 3 NDEF records in NDEF message take payload from first two records (card details and logoImg)
         if (msgs[0].getRecords().length == 3){
             card = getCardFromJSON(msgs[0].getRecords()[0].getPayload());
-            //card.setLogoImgPath();
+            card.setLogoImgPath(new String(msgs[0].getRecords()[1].getPayload()));
             card.setId(0);
         }
         // if there will be 2 NDEF records in NDEF message take payload from first record (card details)
@@ -334,8 +341,8 @@ public class CardsListActivity extends AppCompatActivity {
         catch (Exception e){
             e.printStackTrace();
         }
-
         Log.d("CardNFC","Card from JSON created");
         return card;
     }
+
 }
