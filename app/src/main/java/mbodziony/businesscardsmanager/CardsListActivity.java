@@ -87,8 +87,6 @@ public class CardsListActivity extends AppCompatActivity {
             card = getCardFromNdefMessage(cardIntent);  // get Card object from NDEF message
             cardIntent = new Intent();                  // Consume this intent
             cardIntent.putExtra("action","new");        // set Intent action to "new" (new Card received via NFC)
-
-            //Toast.makeText(this,card.getName(),Toast.LENGTH_SHORT).show();
         }
         // if Card details received form this application Activities
         else {
@@ -119,7 +117,7 @@ public class CardsListActivity extends AppCompatActivity {
     // method gets all Cards from database and populate cards list
     private void getCardsFromDatabase(){
         Cursor cardCursor = dbManager.getAllCardsFromDB("cards");
-        //if (cardCursor != null) Toast.makeText(getApplicationContext(),"Records in DB = " + cardCursor.getCount(),Toast.LENGTH_SHORT).show();
+
         if (cardCursor != null && cardCursor.getCount() > 0) {
             cardCursor.moveToFirst();
             do{
@@ -196,7 +194,6 @@ public class CardsListActivity extends AppCompatActivity {
 
     // method displays "no cards" info and shows "add new" button
     private void showNoCardsInfoIfListEmpty(){
-
         noCardsTxt.setVisibility(View.VISIBLE); ;
         noCardsAddNewTxt.setVisibility(View.VISIBLE);
         newCardBtn.setVisibility(View.VISIBLE);
@@ -212,14 +209,12 @@ public class CardsListActivity extends AppCompatActivity {
 
     // create a popup menu, it will be displayed when user long press item on a list
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.popup_menu, menu);
 
     }
-
 
     // what to do when user click one of popup menu items
     @Override
@@ -260,13 +255,6 @@ public class CardsListActivity extends AppCompatActivity {
                             }
                         })
                         .show();
-//
-//                dbManager.deleteCard("cards",cardList.get(i).getId());
-//                cardList.remove(i);
-//                cardsListView.setAdapter(cardsAdapter);
-//                Toast.makeText(getApplicationContext(),"Card deleted!",Toast.LENGTH_SHORT).show();
-//                if(cardList.size() == 0) showNoCardsInfoIfListEmpty();
-//                return true;
             default:
                 return super.onContextItemSelected(item);
         }
@@ -283,9 +271,10 @@ public class CardsListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         startActivity(new Intent(this,WelcomeActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        finish();
     }
 
-    //
+    // get Card from NDEF message
     private Card getCardFromNdefMessage(Intent intent){
         Card card = null;
         NdefMessage[] msgs = null;
