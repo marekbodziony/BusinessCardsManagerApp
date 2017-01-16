@@ -3,9 +3,14 @@ package mbodziony.businesscardsmanager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
+import android.os.Parcelable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,6 +20,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +38,8 @@ public class CardsListActivity extends AppCompatActivity {
     private TextView noCardsAddNewTxt;
     private Button newCardBtn;
 
+    private NfcAdapter nfcAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,13 +53,14 @@ public class CardsListActivity extends AppCompatActivity {
         cardList = new ArrayList<Card>();
 
         dbManager = new DatabaseManager(getApplicationContext());
-        dbManager.open();           // open connection to database
+        dbManager.open();                   // open connection to database
 
-        cardIntent = getIntent();   // get Intent
+        cardIntent = getIntent();           // get Intent
 
-        serveCardInDatabaseIfNeede();       // save, edit or delete Card from databse
-        getCardsFromDatabase();     // get Cards list from database and populate cards list
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);    // for NFC
 
+        serveCardInDatabaseIfNeeded();      // save, edit or delete Card in database
+        getCardsFromDatabase();             // get Cards list from database and populate cards list
 
         cardsAdapter = new CardsAdapter(this, cardList);
         cardsListView.setAdapter(cardsAdapter);
@@ -59,7 +69,6 @@ public class CardsListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
                 Card card = cardList.get(pos);
-                //Toast.makeText(getApplicationContext(),card.getName(),Toast.LENGTH_SHORT).show();
                 showSelectedCard(card);
             }
         });
@@ -69,14 +78,27 @@ public class CardsListActivity extends AppCompatActivity {
     }
 
     // save new Card, edit Card details or delete Card from database
-    private void serveCardInDatabaseIfNeede(){
+    private void serveCardInDatabaseIfNeeded(){
+        Card card = null;
+        String action = cardIntent.getAction();
+        // if Card details received form other device via NFC
+        if (action != null && action.equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
+            Toast.makeText(this,"NDEF message received!",Toast.LENGTH_SHORT).show();
+            card = getCardFromNdefMessage(cardIntent);  // get Card object from NDEF message
+            cardIntent = new Intent();                  // Consume this intent
+            cardIntent.putExtra("action","new");        // set Intent action to "new" (new Card received via NFC)
 
-        Card card = new Card(cardIntent.getStringExtra("logoPath"),cardIntent.getStringExtra("name"),cardIntent.getStringExtra("mobile"),
-                cardIntent.getStringExtra("phone"),cardIntent.getStringExtra("fax"),cardIntent.getStringExtra("email"),cardIntent.getStringExtra("web"),
-                cardIntent.getStringExtra("company"),cardIntent.getStringExtra("address"),cardIntent.getStringExtra("job"),
-                cardIntent.getStringExtra("facebook"),cardIntent.getStringExtra("tweeter"),cardIntent.getStringExtra("skype"),
-                cardIntent.getStringExtra("other"));
-        card.setId(cardIntent.getLongExtra("id",0));
+            //Toast.makeText(this,card.getName(),Toast.LENGTH_SHORT).show();
+        }
+        // if Card details received form this application Activities
+        else {
+            card = new Card(cardIntent.getStringExtra("logoPath"), cardIntent.getStringExtra("name"), cardIntent.getStringExtra("mobile"),
+                    cardIntent.getStringExtra("phone"), cardIntent.getStringExtra("fax"), cardIntent.getStringExtra("email"), cardIntent.getStringExtra("web"),
+                    cardIntent.getStringExtra("company"), cardIntent.getStringExtra("address"), cardIntent.getStringExtra("job"),
+                    cardIntent.getStringExtra("facebook"), cardIntent.getStringExtra("tweeter"), cardIntent.getStringExtra("skype"),
+                    cardIntent.getStringExtra("other"));
+            card.setId(cardIntent.getLongExtra("id", 0));
+        }
         // add new Card to database
         if (cardIntent.getStringExtra("action").equals("new")){
             dbManager.insertNewCard("cards",card);
@@ -261,5 +283,70 @@ public class CardsListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         startActivity(new Intent(this,WelcomeActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+    }
+
+    //
+    private Card getCardFromNdefMessage(Intent intent){
+        Card card = null;
+        NdefMessage[] msgs = null;
+        Parcelable[] rawMsg = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+        if (rawMsg != null){
+            msgs = new NdefMessage[rawMsg.length];
+            for (int i = 0; i < rawMsg.length; i++){
+                msgs[i] = (NdefMessage)rawMsg[i];
+            }
+        }
+        // if there will be 3 NDEF records in NDEF message take payload from first two records (card details and logoImg)
+        if (msgs[0].getRecords().length == 3){
+            card = getCardFromJSON(msgs[0].getRecords()[0].getPayload());
+            //card.setLogoImgPath();
+            card.setId(0);
+        }
+        // if there will be 2 NDEF records in NDEF message take payload from first record (card details)
+        else if (msgs[0].getRecords().length == 2){
+            card = getCardFromJSON(msgs[0].getRecords()[0].getPayload());
+            card.setId(0);
+        }
+        // if there will less than 2 NDEF records in NDEF message set default values
+        else{
+            card = new Card("null","card_name","card_mobile","card_phone","card_fax","card_email","card_web","card_company",
+                    "card_address","card_job","card_facebook","card_tweeter","card_skype","card_other");
+            card.setId(0);
+        }
+
+        Log.d("CardNFC","Received NDEF message (" + msgs[0].getRecords().length + " records)");
+
+        return card;
+    }
+
+    // get Card information from JSON
+    private Card getCardFromJSON(byte[] payload_card_details){
+
+        Card card = null;
+        try{
+            JSONObject cardJSON = new JSONObject(new String(payload_card_details));
+            String logoPath = cardJSON.getString("logoPath");
+            String name = cardJSON.getString("name");
+            String mobile = cardJSON.getString("mobile");
+            String phone = cardJSON.getString("phone");
+            String fax = cardJSON.getString("fax");
+            String email = cardJSON.getString("email");
+            String web = cardJSON.getString("web");
+            String company = cardJSON.getString("company");
+            String address = cardJSON.getString("address");
+            String job = cardJSON.getString("job");
+            String facebook = cardJSON.getString("facebook");
+            String tweeter = cardJSON.getString("tweeter");
+            String skype = cardJSON.getString("skype");
+            String other = cardJSON.getString("other");
+
+            card = new Card(logoPath,name,mobile,phone,fax,email,web,company,address,job,facebook,tweeter,skype,other);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        Log.d("CardNFC","Card from JSON created");
+        return card;
     }
 }

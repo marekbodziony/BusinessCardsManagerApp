@@ -1,8 +1,10 @@
 package mbodziony.businesscardsmanager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,7 +21,7 @@ public class ShareActivity extends AppCompatActivity {
         setContentView(R.layout.activity_share);
         setTitle("Udostępnij przez :");
 
-        nfcAdapter = NfcAdapter.getDefaultAdapter(this);        // create NfcAdapter object to check if device support NFC
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);        // NfcAdapter object to handle NFC service availability
 
     }
 
@@ -39,7 +41,7 @@ public class ShareActivity extends AppCompatActivity {
         }
         // if user choose to share Card via NFC while NFC is on - display info to tap devices together
         else {
-            Toast.makeText(this,"Tap your devices together to send a Card.\nIt will start automaticly.",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Tap your device with other device to share your Card via NFC",Toast.LENGTH_LONG).show();
             finish();
         }
 

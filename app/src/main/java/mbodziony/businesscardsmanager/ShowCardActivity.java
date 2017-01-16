@@ -3,14 +3,22 @@ package mbodziony.businesscardsmanager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
+import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class ShowCardActivity extends AppCompatActivity {
 
@@ -44,6 +52,8 @@ public class ShowCardActivity extends AppCompatActivity {
     private TextView skype;
     private TextView otherTxt;
     private TextView other;
+
+    private NfcAdapter nfcAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +89,9 @@ public class ShowCardActivity extends AppCompatActivity {
 
         // set values of Card object taken from Intent (and hide empty fields)
         setMyCardValues();
+
+        // set NfcAdapter for NFC sharing
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
     }
 
     // delete MyCard
@@ -231,9 +244,65 @@ public class ShowCardActivity extends AppCompatActivity {
         startActivity(cardIntent);
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        // if NFC is enable on device set NDEF message ready for sharing via NFC
+        if (nfcAdapter != null && nfcAdapter.isEnabled())
+            nfcAdapter.setNdefPushMessage(putCardContentToNdefMessage(),this);
+    }
+
     // share Card with other Android devices
     public void shareCard(View view){
         Intent shareCardIntent = new Intent(this,ShareActivity.class);
         startActivity(shareCardIntent);
+    }
+
+    // put Card content to NDEF message (for sharing via NFC)
+    private NdefMessage putCardContentToNdefMessage(){
+
+        byte[] payload_card_details = cardToJSON(myCard).getBytes();
+        byte[] payload_card_logo = "".getBytes();
+
+        // create NDEF records and put card payload
+        NdefRecord record1 = new NdefRecord(NdefRecord.TNF_WELL_KNOWN,NdefRecord.RTD_TEXT,new byte[0],payload_card_details);
+        NdefRecord record2 = new NdefRecord(NdefRecord.TNF_WELL_KNOWN,NdefRecord.RTD_TEXT,new byte[0],payload_card_logo);
+
+        // put NDEF records to NDEF message
+        NdefMessage msg = new NdefMessage(new NdefRecord[]{record1, record2, NdefRecord.createApplicationRecord("mbodziony.businesscardsmanager")});
+
+        Log.d("CardNFC","NDEF message created (" + msg.getRecords().length + " records)");
+
+        return  msg;
+    }
+
+    // put Card information to JSON file
+    private String cardToJSON(Card card){
+
+        try {
+            JSONObject cardJSON = new JSONObject();
+            cardJSON.put("logoPath",card.getLogoImgPath());
+            cardJSON.put("name",card.getName());
+            cardJSON.put("mobile",card.getMobile());
+            cardJSON.put("phone",card.getPhone());
+            cardJSON.put("fax",card.getFax());
+            cardJSON.put("email",card.getEmail());
+            cardJSON.put("web",card.getWeb());
+            cardJSON.put("company",card.getCompany());
+            cardJSON.put("address",card.getAddress());
+            cardJSON.put("job",card.getJob());
+            cardJSON.put("facebook",card.getFacebook());
+            cardJSON.put("tweeter",card.getTweeter());
+            cardJSON.put("skype",card.getSkype());
+            cardJSON.put("other",card.getOther());
+
+            Log.d("CardNFC","JSON file created!");
+
+            return cardJSON.toString();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
