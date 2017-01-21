@@ -1,7 +1,9 @@
 package mbodziony.businesscardsmanager;
 
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -88,8 +90,9 @@ public class ShowCardActivity extends AppCompatActivity {
         // set values of Card object taken from Intent (and hide empty fields)
         setMyCardValues();
 
-        // set NfcAdapter for NFC sharing
+        // for NFC sharing
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
     }
 
     // delete MyCard

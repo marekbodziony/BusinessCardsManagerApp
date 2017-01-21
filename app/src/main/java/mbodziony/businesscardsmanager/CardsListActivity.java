@@ -1,7 +1,9 @@
 package mbodziony.businesscardsmanager;
 
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -38,6 +40,8 @@ public class CardsListActivity extends AppCompatActivity {
     private Button newCardBtn;
 
     private NfcAdapter nfcAdapter;
+    private PendingIntent nfcPendingIntent;
+    private IntentFilter[] ndefIntentFilters;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +60,17 @@ public class CardsListActivity extends AppCompatActivity {
 
         cardIntent = getIntent();           // get Intent
 
-        nfcAdapter = NfcAdapter.getDefaultAdapter(this);    // for NFC
+        // for NFC sharing
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        nfcPendingIntent = PendingIntent.getActivity(this,0,new Intent(this,getClass()).setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),0);
+        IntentFilter ndefFilter = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
+        try {
+            ndefFilter.addDataType("text/plain");                   // set payload type which interests us in NDEF message
+            ndefIntentFilters = new IntentFilter[]{ndefFilter};
+        }
+        catch (IntentFilter.MalformedMimeTypeException e) {
+            e.printStackTrace();
+        }
 
         serveCardInDatabaseIfNeeded();      // save, edit or delete Card in database (depend of Intent action)
         getCardsFromDatabase();             // get Cards list from database and populate cards list
@@ -75,6 +89,30 @@ public class CardsListActivity extends AppCompatActivity {
 
         // add context popup menu to cards list
         registerForContextMenu(cardsListView);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        nfcAdapter.enableForegroundDispatch(this,nfcPendingIntent,ndefIntentFilters,null);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        nfcAdapter.disableForegroundDispatch(this);
+    }
+
+    @Override
+    public void onNewIntent (Intent intent){
+        Log.d("CardNFC","New Intent received");
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())){
+            Log.d("CardNFC","NDEF Intent received");
+            Card card = getCardFromNdefMessage(intent);
+            dbManager.insertNewCard("cards",card);
+            Toast.makeText(getApplicationContext(),"Card SAVED",Toast.LENGTH_SHORT).show();
+            showSelectedCard(card);
+        }
     }
 
     // save new Card, edit Card details or delete Card from database (depending on Intent action)
