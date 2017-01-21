@@ -18,8 +18,11 @@ import static mbodziony.businesscardsmanager.R.id.radioButton1;
 public class SettingsActivity extends AppCompatActivity {
 
     private Button save;
+    boolean style1;
+    boolean style2;
+    boolean style3;
+    boolean style4;
 
-   // android:onClick="onRadioButtonClicked"
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,78 +33,54 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void saveTheme(View view){
 
+        // save style value in internal memory
         SharedPreferences settings = getSharedPreferences("Style", 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean("Style1", true);
-        editor.putBoolean("Style2", false);
-        editor.putBoolean("Style3", false);
-        editor.putBoolean("Style4", false);
-//        boolean checked = ((RadioButton) view).isChecked();
-
-
-
-//                break;
-//            case R.id.radioButton2:
-//                if (checked)
-//                    editor.putBoolean("Style1", false);
-//                editor.putBoolean("Style2", true);
-//                editor.putBoolean("Style3", false);
-//                editor.putBoolean("Style4", false);
-//                break;
-//            case R.id.radioButton3:
-//                if (checked)
-//                    editor.putBoolean("Style1", false);
-//                editor.putBoolean("Style2", false);
-//                editor.putBoolean("Style3", true);
-//                editor.putBoolean("Style4", false);
-//                break;
-//            case R.id.radioButton4:
-//                if (checked)
-//                    editor.putBoolean("Style1", false);
-//                editor.putBoolean("Style2", false);
-//                editor.putBoolean("Style3", false);
-//                editor.putBoolean("Style4", true);
-//                break;
-//        }
-
-        System.out.println("tu sie wywaliło4");
+        // value style is set when radiobutton is selected
+        editor.putBoolean("Style1", style1);
+        editor.putBoolean("Style2", style2);
+        editor.putBoolean("Style3", style3);
+        editor.putBoolean("Style4", style4);
         editor.commit(); // Commit the changes
         Intent showWelcomeActivity = new Intent(this,WelcomeActivity.class);
         startActivity(showWelcomeActivity);
 
     }
 
+    public void onRadioButtonClicked(View view) {
+        // check whether the button is currrently checked
+        boolean checked = ((RadioButton) view).isChecked();
 
-//       //  Check which radio button was clicked
-//        switch(view.getId()) {
-//            case radioButton1:
-//                if (checked)
-//                editor.putBoolean("Style1", true);
-//                editor.putBoolean("Style2", false);
-//                editor.putBoolean("Style3", false);
-//                editor.putBoolean("Style4", false);
-//                    break;
-//            case R.id.radioButton2:
-//                if (checked)
-//                editor.putBoolean("Style1", false);
-//                editor.putBoolean("Style2", true);
-//                editor.putBoolean("Style3", false);
-//                editor.putBoolean("Style4", false);
-//                    break;
-//            case R.id.radioButton3:
-//                if (checked)
-//                editor.putBoolean("Style1", false);
-//                editor.putBoolean("Style2", false);
-//                editor.putBoolean("Style3", true);
-//                editor.putBoolean("Style4", false);
-//                break;
-//            case R.id.radioButton4:
-//                if (checked)
-//                editor.putBoolean("Style1", false);
-//                editor.putBoolean("Style2", false);
-//                editor.putBoolean("Style3", false);
-//                editor.putBoolean("Style4", true);
-//                break;
-//        }
-//    }
+        // check which radio button was clicked and set bool value that will be used in preferences
+        switch(view.getId()) {
+            case radioButton1:
+                if (checked)
+                style1 = true;
+                style2 = false;
+                style3 = false;
+                style4 = false;
+                    break;
+            case R.id.radioButton2:
+                if (checked)
+                style1 = false;
+                style2 = true;
+                style3 = false;
+                style4 = false;
+                    break;
+            case R.id.radioButton3:
+                if (checked)
+                style1 = false;
+                style2 = false;
+                style3 = true;
+                style4 = false;
+                break;
+            case R.id.radioButton4:
+                if (checked)
+                style1 = false;
+                style2 = false;
+                style3 = false;
+                style4 = true;
+                break;
+        }
+    }
 }

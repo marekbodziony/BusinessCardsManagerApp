@@ -1,6 +1,7 @@
 package mbodziony.businesscardsmanager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -15,14 +16,27 @@ public class WelcomeActivity extends AppCompatActivity {
     private Button add;
     private Button myCard;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome1);
         ImageView img = (ImageView) findViewById(R.id.imageView);
- //       img.setImageResource(R.drawable.welcome_logo_blue);
 
+        // check what style is saved in preferences
+        SharedPreferences settings = getSharedPreferences("Style", 0);
+        boolean Style1 = settings.getBoolean("Style1", false);
+        boolean Style2 = settings.getBoolean("Style2", false);
+        boolean Style3 = settings.getBoolean("Style3", false);
+        boolean Style4 = settings.getBoolean("Style4", false);
+        // match saved style with particular logo to be displayed
+        if(Style1==true)
+        img.setImageResource(R.drawable.welcome_logo_green);
+        if(Style2==true)
+            img.setImageResource(R.drawable.welcome_logo_orange);
+        if(Style3==true)
+            img.setImageResource(R.drawable.welcome_logo_blue);
+        if(Style4==true)
+            img.setImageResource(R.drawable.welcome_logo_x256);
 
         myCard = (Button)findViewById(R.id.my_card_btn);
         add =  (Button)findViewById(R.id.add_btn);

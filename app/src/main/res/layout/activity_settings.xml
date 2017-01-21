@@ -35,38 +35,38 @@
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rgroup">
+        android:id="@+id/rgroup"
+        android:checkedButton="@+id/Standard">
 
         <RadioButton
             android:text="Ivy Green"
             android:layout_width="wrap_content"
             android:layout_height="84dp"
             android:id="@+id/radioButton1"
-           />
+            android:onClick="onRadioButtonClicked"/>
 
         <RadioButton
-            android:text="Flame Red"
+            android:text="Orange Juice"
             android:layout_width="wrap_content"
             android:layout_height="71dp"
             android:id="@+id/radioButton2"
-            />
+            android:onClick="onRadioButtonClicked"/>
 
         <RadioButton
             android:text="Deep Blue"
             android:layout_width="178dp"
             android:layout_height="78dp"
             android:id="@+id/radioButton3"
-            />
+            android:onClick="onRadioButtonClicked"/>
 
         <RadioButton
             android:text="Standard"
+            android:checked="true"
             android:layout_width="143dp"
             android:layout_height="77dp"
             android:id="@+id/radioButton4"
-           />
+            android:onClick="onRadioButtonClicked"/>
 
     </RadioGroup>
-
-
 
 </LinearLayout>
