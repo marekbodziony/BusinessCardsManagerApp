@@ -1,19 +1,44 @@
 package mbodziony.businesscardsmanager;
 
+import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
+import android.nfc.tech.NfcA;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
+
+
+import static android.os.Environment.getExternalStorageDirectory;
 
 public class ShowCardActivity extends AppCompatActivity {
 
     private Card myCard;
     private Intent cardIntent;
+    JSONObject cardJSON = new JSONObject();
 
     private long id;
     private ImageView logo;
@@ -42,6 +67,12 @@ public class ShowCardActivity extends AppCompatActivity {
     private TextView skype;
     private TextView otherTxt;
     private TextView other;
+
+    private NfcAdapter nfcAdapter;
+    // set how long device should be visible
+    private static final int DISCOVER_DURATION = 300;
+    private static final int REQUEST_BLU = 1;
+    private Button shareBluetooth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,17 +108,33 @@ public class ShowCardActivity extends AppCompatActivity {
 
         // set values of Card object taken from Intent (and hide empty fields)
         setMyCardValues();
+
+        // set NfcAdapter for NFC sharing
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
     }
 
     // delete MyCard
     public void deleteMyCard(View view){
         //Toast.makeText(getApplicationContext(),"DELETE",Toast.LENGTH_SHORT).show();
-        String action = cardIntent.getStringExtra("action");
-        if (action.equals("myCard")) cardIntent.setClass(this, MyCardsListActivity.class);
-        else if (action.equals("cardFromList")) cardIntent.setClass(this, CardsListActivity.class);
-        putCardInfoToIntent();
-        cardIntent.putExtra("action","delete");     // information that Card from this Intent should be deleted in database
-        startActivity(cardIntent);
+        new AlertDialog.Builder(this).setTitle("Usunąć wizytówkę ?")
+                .setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String action = cardIntent.getStringExtra("action");
+                        if (action.equals("myCard")) cardIntent.setClass(getApplicationContext(), MyCardsListActivity.class);
+                        else if (action.equals("cardFromList")) cardIntent.setClass(getApplicationContext(), CardsListActivity.class);
+                        putCardInfoToIntent();
+                        cardIntent.putExtra("action","delete");     // information that Card from this Intent should be deleted in database
+                        startActivity(cardIntent);
+                    }
+                })
+                .setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        return;
+                    }
+                })
+                .show();
     }
     // edit MyCard
     public void editMyCard(View view){
@@ -216,9 +263,160 @@ public class ShowCardActivity extends AppCompatActivity {
         startActivity(cardIntent);
     }
 
-    // share Card with other Android devices
+    @Override
+    public void onResume(){
+        super.onResume();
+        // if NFC is enable on device set NDEF message ready for sharing via NFC
+        if (nfcAdapter != null && nfcAdapter.isEnabled())
+            nfcAdapter.setNdefPushMessage(putCardContentToNdefMessage(),this);
+    }
+
+
+    // put Card content to NDEF message (for sharing via NFC)
+    private NdefMessage putCardContentToNdefMessage(){
+
+        byte[] payload_card_details = cardToJSON(myCard).getBytes();
+        byte[] payload_card_logo = "".getBytes();
+
+        // create NDEF records and put card payload
+        NdefRecord record1 = new NdefRecord(NdefRecord.TNF_WELL_KNOWN,NdefRecord.RTD_TEXT,new byte[0],payload_card_details);
+        NdefRecord record2 = new NdefRecord(NdefRecord.TNF_WELL_KNOWN,NdefRecord.RTD_TEXT,new byte[0],payload_card_logo);
+
+        // put NDEF records to NDEF message
+        NdefMessage msg = new NdefMessage(new NdefRecord[]{record1, record2, NdefRecord.createApplicationRecord("mbodziony.businesscardsmanager")});
+
+        Log.d("CardNFC","NDEF message created (" + msg.getRecords().length + " records)");
+
+        return  msg;
+    }
+
+    // share Card via Bluetooth
     public void shareCard(View view){
-        Intent shareCardIntent = new Intent(this,ShareActivity.class);
-        startActivity(shareCardIntent);
+
+        BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        // if adapter was not found bluetooth is not available on the device
+        if(btAdapter == null) {
+            Toast.makeText(this, "Bluetooth nie jest obsługiwany na urządzeniu", Toast.LENGTH_LONG).show();
+        } else {
+            enableBluetooth();
+        }
+    }
+
+    public void enableBluetooth() {
+
+        // ask for permission to enable Bluetooth and make device visible
+        Intent discoveryIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoveryIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, DISCOVER_DURATION);
+        startActivityForResult(discoveryIntent, REQUEST_BLU);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(resultCode == DISCOVER_DURATION && requestCode == REQUEST_BLU) {
+
+            // set type of file to be sent via Bluetooth
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+
+            // convert card to json format
+            try {
+
+                cardJSON.put("logoPath", myCard.getLogoImgPath());
+                cardJSON.put("name", myCard.getName());
+                cardJSON.put("mobile", myCard.getMobile());
+                cardJSON.put("phone", myCard.getPhone());
+                cardJSON.put("fax", myCard.getFax());
+                cardJSON.put("email", myCard.getEmail());
+                cardJSON.put("web", myCard.getWeb());
+                cardJSON.put("company", myCard.getCompany());
+                cardJSON.put("address", myCard.getAddress());
+                cardJSON.put("job", myCard.getJob());
+                cardJSON.put("facebook", myCard.getFacebook());
+                cardJSON.put("tweeter", myCard.getTweeter());
+                cardJSON.put("skype", myCard.getSkype());
+                cardJSON.put("other", myCard.getOther());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            // for debugging
+            System.out.println("The directory is: " + getExternalStorageDirectory());
+
+            // write json file to bluetoothCard.json
+            try (FileWriter file = new FileWriter("/storage/emulated/0/bluetoothCard.json")) {
+            // convert json file to string
+                file.write(cardJSON.toString());
+            // for debugging
+                System.out.println("Udało się skopiować obiekt json do pliku ...");
+                System.out.println("\nJSON Object: " + cardJSON);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // prepare file to send and send file if bluetooth was found and was not canceled during the process
+            File f = new File(getExternalStorageDirectory(), "bluetoothCard.json");
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(f));
+            PackageManager pm = getPackageManager();
+            List<ResolveInfo> appsList = pm.queryIntentActivities(intent, 0);
+
+            if(appsList.size() > 0) {
+                String packageName = null;
+                String className = null;
+                boolean found = false;
+
+                for(ResolveInfo info : appsList) {
+                    packageName = info.activityInfo.packageName;
+                    if(packageName.equals("com.android.bluetooth")) {
+                        className = info.activityInfo.name;
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    Toast.makeText(this, "Bluetooth nie został znaleziony",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    intent.setClassName(packageName, className);
+                    startActivity(intent);
+                }
+            }
+        } else {
+            Toast.makeText(this, "Bluetooth został anulowany", Toast.LENGTH_LONG)
+                    .show();
+        }
+    }
+
+    // put Card information to JSON file
+    private String cardToJSON(Card card){
+
+        try {
+            JSONObject cardJSON = new JSONObject();
+            cardJSON.put("logoPath",card.getLogoImgPath());
+            cardJSON.put("name",card.getName());
+            cardJSON.put("mobile",card.getMobile());
+            cardJSON.put("phone",card.getPhone());
+            cardJSON.put("fax",card.getFax());
+            cardJSON.put("email",card.getEmail());
+            cardJSON.put("web",card.getWeb());
+            cardJSON.put("company",card.getCompany());
+            cardJSON.put("address",card.getAddress());
+            cardJSON.put("job",card.getJob());
+            cardJSON.put("facebook",card.getFacebook());
+            cardJSON.put("tweeter",card.getTweeter());
+            cardJSON.put("skype",card.getSkype());
+            cardJSON.put("other",card.getOther());
+
+            Log.d("CardNFC","JSON file created!");
+
+            return cardJSON.toString();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

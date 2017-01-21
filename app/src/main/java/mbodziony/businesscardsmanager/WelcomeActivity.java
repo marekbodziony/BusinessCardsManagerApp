@@ -22,6 +22,11 @@ public class WelcomeActivity extends AppCompatActivity {
         myCard = (Button)findViewById(R.id.my_card_btn);
         add =  (Button)findViewById(R.id.add_btn);
         turnOff = (Button)findViewById(R.id.turn_off_btn);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String message= extras.getString("radioChosen");
+        }
     }
 
     public void showMyCard(View view){

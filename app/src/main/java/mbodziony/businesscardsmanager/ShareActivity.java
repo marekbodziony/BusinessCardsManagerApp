@@ -1,41 +1,36 @@
 package mbodziony.businesscardsmanager;
 
 import android.bluetooth.BluetoothAdapter;
-        import android.bluetooth.BluetoothDevice;
-        import android.bluetooth.BluetoothServerSocket;
-        import android.bluetooth.BluetoothSocket;
-        import android.content.BroadcastReceiver;
-        import android.content.Context;
-        import android.content.Intent;
-        import android.content.IntentFilter;
-        import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
-        import android.util.Log;
-        import android.view.View;
-        import android.widget.Button;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothServerSocket;
+import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
-        import java.io.File;
-        import java.util.List;
+import java.io.File;
+import java.util.List;
 
-        import android.bluetooth.BluetoothAdapter;
-        import android.content.Intent;
-        import android.content.pm.PackageManager;
-        import android.content.pm.ResolveInfo;
-        import android.net.Uri;
-        import android.os.Bundle;
-        import android.os.Environment;
-        import android.support.v7.app.ActionBarActivity;
-        import android.view.View;
-        import android.widget.Toast;
-
-import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.support.v7.app.ActionBarActivity;
+import android.view.View;
+import android.widget.Toast;
 
 import java.io.IOException;
-        import java.util.Set;
-        import java.util.UUID;
+import java.util.Set;
+import java.util.UUID;
 
 public class ShareActivity extends AppCompatActivity {
 
@@ -48,7 +43,6 @@ public class ShareActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
-
 
         shareBluetooth = (Button)findViewById(R.id.bluetooth_btn);
 
@@ -81,14 +75,10 @@ public class ShareActivity extends AppCompatActivity {
 
         if(resultCode == DISCOVER_DURATION && requestCode == REQUEST_BLU) {
 
-//            Gson gson = new Gson();
-//            String json = gson.toJson();
-
-
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_SEND);
             intent.setType("text/plain");
-            File f = new File(Environment.getExternalStorageDirectory(), "jason.json");
+            File f = new File(Environment.getExternalStorageDirectory(), "bluetooth.txt");
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(f));
 
             PackageManager pm = getPackageManager();
@@ -121,41 +111,20 @@ public class ShareActivity extends AppCompatActivity {
                     .show();
         }
     }
-
-
-
-    private String cardToJSON(Card card){
-
-        try {
-            JSONObject cardJSON = new JSONObject();
-            cardJSON.put("logoPath",card.getLogoImgPath());
-            cardJSON.put("name",card.getName());
-            cardJSON.put("mobile",card.getMobile());
-            cardJSON.put("phone",card.getPhone());
-            cardJSON.put("fax",card.getFax());
-            cardJSON.put("email",card.getEmail());
-            cardJSON.put("web",card.getWeb());
-            cardJSON.put("company",card.getCompany());
-            cardJSON.put("address",card.getAddress());
-            cardJSON.put("job",card.getJob());
-            cardJSON.put("facebook",card.getFacebook());
-            cardJSON.put("tweeter",card.getTweeter());
-            cardJSON.put("skype",card.getSkype());
-            cardJSON.put("other",card.getOther());
-
-            Log.d("TAG","JSON file created!");
-            Log.d("TAG",cardJSON.toString());
-
-            return cardJSON.toString();
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

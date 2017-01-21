@@ -12,6 +12,13 @@
     tools:context="mbodziony.businesscardsmanager.SettingsActivity"
     android:weightSum="1">
 
+    <Button
+        android:text="Save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/saveTheme_btn"
+        android:onClick="saveTheme"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,7 +41,7 @@
             android:text="Ivy Green"
             android:layout_width="wrap_content"
             android:layout_height="84dp"
-            android:id="@+id/radioButton" />
+            android:id="@+id/radioButton1" />
 
         <RadioButton
             android:text="Flame Red"
