@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -14,10 +15,14 @@ public class WelcomeActivity extends AppCompatActivity {
     private Button add;
     private Button myCard;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome1);
+        ImageView img = (ImageView) findViewById(R.id.imageView);
+ //       img.setImageResource(R.drawable.welcome_logo_blue);
+
 
         myCard = (Button)findViewById(R.id.my_card_btn);
         add =  (Button)findViewById(R.id.add_btn);

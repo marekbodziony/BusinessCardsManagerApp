@@ -41,25 +41,29 @@
             android:text="Ivy Green"
             android:layout_width="wrap_content"
             android:layout_height="84dp"
-            android:id="@+id/radioButton1" />
+            android:id="@+id/radioButton1"
+           />
 
         <RadioButton
             android:text="Flame Red"
             android:layout_width="wrap_content"
             android:layout_height="71dp"
-            android:id="@+id/radioButton2" />
+            android:id="@+id/radioButton2"
+            />
 
         <RadioButton
             android:text="Deep Blue"
             android:layout_width="178dp"
             android:layout_height="78dp"
-            android:id="@+id/radioButton3" />
+            android:id="@+id/radioButton3"
+            />
 
         <RadioButton
             android:text="Standard"
             android:layout_width="143dp"
             android:layout_height="77dp"
-            android:id="@+id/radioButton4" />
+            android:id="@+id/radioButton4"
+           />
 
     </RadioGroup>
 
