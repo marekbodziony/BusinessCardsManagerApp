@@ -3,8 +3,6 @@ package mbodziony.businesscardsmanager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -24,12 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONObject;
-
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,12 +58,13 @@ public class CardsListActivity extends AppCompatActivity {
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);    // for NFC
 
-        serveCardInDatabaseIfNeeded();      // save, edit or delete Card in database
+        serveCardInDatabaseIfNeeded();      // save, edit or delete Card in database (depend of Intent action)
         getCardsFromDatabase();             // get Cards list from database and populate cards list
 
         cardsAdapter = new CardsAdapter(this, cardList);
         cardsListView.setAdapter(cardsAdapter);
 
+        // show Card (go to ShowCardActivity) when user click Card on cards list
         cardsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
@@ -80,20 +73,20 @@ public class CardsListActivity extends AppCompatActivity {
             }
         });
 
-        // add context popup menu to DateCounter list
+        // add context popup menu to cards list
         registerForContextMenu(cardsListView);
     }
 
-    // save new Card, edit Card details or delete Card from database
+    // save new Card, edit Card details or delete Card from database (depending on Intent action)
     private void serveCardInDatabaseIfNeeded(){
         Card card = null;
         String action = cardIntent.getAction();
         // if Card details received form other device via NFC
         if (action != null && action.equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
             Toast.makeText(this,"NDEF message received!",Toast.LENGTH_SHORT).show();
-            card = getCardFromNdefMessage(cardIntent);  // get Card object from NDEF message
-            cardIntent = new Intent();                  // Consume this intent
-            cardIntent.putExtra("action","newNFC");        // set Intent action to "new" (new Card received via NFC)
+            card = getCardFromNdefMessage(cardIntent);          // get Card object from NDEF message
+            cardIntent = new Intent();                          // Consume this intent
+            cardIntent.putExtra("action","newNFC");             // set Intent action to "new" (new Card received via NFC)
         }
         // if Card details received form this application Activities
         else {
@@ -157,7 +150,7 @@ public class CardsListActivity extends AppCompatActivity {
             while (cardCursor.moveToNext());
         }
         else {
-            showNoCardsInfoIfListEmpty();       // if no cards element in database display "no cards" info, show "add new" button
+            showNoCardsInfoIfListEmpty();       // if no cards element in database display "no cards" info and show "add new" button
         }
 
     }
@@ -220,7 +213,7 @@ public class CardsListActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    // create a popup menu, it will be displayed when user long press item on a list
+    // create a popup menu, it will be displayed when user long press Card item on a cards list
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -247,12 +240,10 @@ public class CardsListActivity extends AppCompatActivity {
                 return true;
             // delete selected Card
             case R.id.menu_delete:
-
                 new AlertDialog.Builder(this).setTitle("Usunąć wizytówkę ?")
                         .setPositiveButton("Tak", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int j) {
-
                                 dbManager.deleteCard("cards",cardList.get(i).getId());
                                 cardList.remove(i);
                                 cardsListView.setAdapter(cardsAdapter);
@@ -287,7 +278,7 @@ public class CardsListActivity extends AppCompatActivity {
         finish();
     }
 
-    // get Card from NDEF message
+    // get Card info from NDEF message
     private Card getCardFromNdefMessage(Intent intent){
         Card card = null;
         NdefMessage[] msgs = null;

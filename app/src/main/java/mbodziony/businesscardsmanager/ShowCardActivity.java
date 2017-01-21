@@ -2,8 +2,6 @@ package mbodziony.businesscardsmanager;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -19,11 +17,6 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 public class ShowCardActivity extends AppCompatActivity {
 
@@ -101,7 +94,6 @@ public class ShowCardActivity extends AppCompatActivity {
 
     // delete MyCard
     public void deleteMyCard(View view){
-        //Toast.makeText(getApplicationContext(),"DELETE",Toast.LENGTH_SHORT).show();
         new AlertDialog.Builder(this).setTitle("Usunąć wizytówkę ?")
                 .setPositiveButton("Tak", new DialogInterface.OnClickListener() {
                     @Override
@@ -110,7 +102,7 @@ public class ShowCardActivity extends AppCompatActivity {
                         if (action.equals("myCard")) cardIntent.setClass(getApplicationContext(), MyCardsListActivity.class);
                         else if (action.equals("cardFromList")) cardIntent.setClass(getApplicationContext(), CardsListActivity.class);
                         putCardInfoToIntent();
-                        cardIntent.putExtra("action","delete");     // information that Card from this Intent should be deleted in database
+                        cardIntent.putExtra("action","delete");     // Card from this Intent should be deleted in database
                         startActivity(cardIntent);
                     }
                 })
@@ -211,7 +203,7 @@ public class ShowCardActivity extends AppCompatActivity {
         }
     }
 
-    // private method put MyCard data (fields) to Intent object
+    // private method puts Card data (fields) to Intent object
     private void putCardInfoToIntent(){
         if (cardIntent.getStringExtra("action").equals("myCard")) {cardIntent.putExtra("action","editMyCard");}
         else if (cardIntent.getStringExtra("action").equals("cardFromList")) {cardIntent.putExtra("action","edit");}
@@ -267,11 +259,13 @@ public class ShowCardActivity extends AppCompatActivity {
     private NdefMessage putCardContentToNdefMessage(){
 
         byte[] payload_card_details = cardToJSON(myCard).getBytes();
-        byte[] payload_card_logo = "null".getBytes();//logoImgToBytes(myCard);
+        // at this moment there's no sending logo via NFC functionality, so payload_card_logo is set to null
+        byte[] payload_card_logo = null;
+        if (payload_card_logo == null) payload_card_logo = "null".getBytes();   // if logo payload is null set default value of logo
 
         // create NDEF records and put card payload
         NdefRecord record1 = new NdefRecord(NdefRecord.TNF_WELL_KNOWN,NdefRecord.RTD_TEXT,new byte[0],payload_card_details);
-        NdefRecord record2 = new NdefRecord(NdefRecord.TNF_WELL_KNOWN,NdefRecord.RTD_TEXT,new byte[0],payload_card_logo);
+        NdefRecord record2 = NdefRecord.createMime("image/jpeg",payload_card_logo);
 
         // put NDEF records to NDEF message
         NdefMessage msg = new NdefMessage(new NdefRecord[]{record1, record2, NdefRecord.createApplicationRecord("mbodziony.businesscardsmanager")});
@@ -281,7 +275,7 @@ public class ShowCardActivity extends AppCompatActivity {
         return  msg;
     }
 
-    // put Card information to JSON file (later it will be converted to byte[] for sending in NDEF record payload)
+    // put Card information to JSON file (it will be converted to byte[] for sending in NDEF record payload)
     private String cardToJSON(Card card){
 
         try {
