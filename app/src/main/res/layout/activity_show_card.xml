@@ -288,7 +288,14 @@
             android:background="@drawable/share_x128"
             android:layout_toLeftOf="@id/myCard_editBtn"
             android:layout_marginRight="10dp"
+            android:id="@+id/share_btn"
             android:onClick="shareCard"/>
+        <Button
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:background="@drawable/bluetooth"
+            android:layout_toLeftOf="@id/share_btn"
+            android:onClick="shareViaBluetooth"/>
 
     </RelativeLayout>
 </ScrollView>

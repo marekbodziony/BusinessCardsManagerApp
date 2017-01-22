@@ -1,19 +1,31 @@
 package mbodziony.businesscardsmanager;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.nfc.NfcAdapter;
+import android.os.Environment;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
+
+import java.io.File;
+import java.util.List;
 
 public class ShareActivity extends AppCompatActivity {
 
     private NfcAdapter nfcAdapter;
     private static boolean closeShareActivity = false;
+
+    private static final int DISCOVER_DURATION = 300;
+    private static final int REQUEST_BLU = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +34,8 @@ public class ShareActivity extends AppCompatActivity {
         setTitle("Udostępnij przez :");
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);        // NfcAdapter object to handle NFC service availability
-
     }
+
 
     // method to share Card via NFC
     public void shareViaNfc (View view){

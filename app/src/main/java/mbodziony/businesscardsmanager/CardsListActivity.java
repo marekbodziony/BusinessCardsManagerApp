@@ -1,6 +1,7 @@
 package mbodziony.businesscardsmanager;
 
 import android.app.PendingIntent;
+import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -8,6 +9,7 @@ import android.database.Cursor;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +26,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +45,9 @@ public class CardsListActivity extends AppCompatActivity {
     private TextView noCardsTxt;
     private TextView noCardsAddNewTxt;
     private Button newCardBtn;
+    private Button bluetoothBtn;
+
+    private BluetoothAdapter btAdapter;
 
     private NfcAdapter nfcAdapter;
     private PendingIntent nfcPendingIntent;
@@ -51,6 +61,7 @@ public class CardsListActivity extends AppCompatActivity {
         noCardsTxt = (TextView)findViewById(R.id.no_cards_on_list);
         noCardsAddNewTxt = (TextView)findViewById(R.id.no_cards_add_new);
         newCardBtn = (Button)findViewById(R.id.no_cards_add_new_btn);
+        bluetoothBtn = (Button)findViewById(R.id.readfromBT);
 
         cardsListView = (ListView) findViewById(R.id.cardsListView);
         cardList = new ArrayList<Card>();
@@ -379,5 +390,54 @@ public class CardsListActivity extends AppCompatActivity {
         Log.d("CardNFC","Card from JSON created");
         return card;
     }
+
+    // read json file send via Bluetooth from other device and save to database
+    public void readFromBluetoothFile(View view)  {
+        // find location of json file in phone memory, if file was not sent/saved communicate this to the user
+        File f = null;
+        try {
+            File jsonLocation = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            f = new File(jsonLocation,"bluetoothCard.json");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(),"File is not in download directory, please re-send",Toast.LENGTH_SHORT).show();
+        }
+
+        //info for debugging if file exists
+        if (f.exists()) {
+            System.out.println("it exists");
+        }
+
+        // convert jason file to byte array
+        byte[] bytesArray = new byte[(int) f.length()];
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(f);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            //read file into bytes[]
+            fis.read(bytesArray);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //      String action = cardIntent.getAction();
+
+        // create card from bytes array pulled from .json file and save it to database
+        dbManager.insertNewCard("cards",getCardFromJSON(bytesArray));
+        // inform user that card was correctly saved
+        Toast.makeText(getApplicationContext(),"Card SAVED",Toast.LENGTH_SHORT).show();
+        // delete file received by bluetooth (no longer needed)
+        f.delete();
+        Toast.makeText(getApplicationContext(),"Bluetooth file deleted",Toast.LENGTH_SHORT).show();
+    }
+
 
 }

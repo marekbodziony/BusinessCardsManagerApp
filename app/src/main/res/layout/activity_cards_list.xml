@@ -44,5 +44,14 @@
         android:layout_marginTop="20dp"
         android:onClick="createNewCard"
         android:visibility="invisible"/>
+    <Button
+        android:text="Read"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/readfromBT"
+        android:onClick="readFromBluetoothFile"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="11dp" />
 
 </RelativeLayout>

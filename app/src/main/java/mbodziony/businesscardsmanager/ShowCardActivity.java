@@ -1,18 +1,23 @@
 package mbodziony.businesscardsmanager;
 
 import android.app.PendingIntent;
+import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,10 +25,16 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
+
 public class ShowCardActivity extends AppCompatActivity {
 
     private Card myCard;
     private Intent cardIntent;
+    JSONObject cardJSON = new JSONObject();
 
     private long id;
     private ImageView logo;
@@ -52,6 +63,11 @@ public class ShowCardActivity extends AppCompatActivity {
     private TextView skype;
     private TextView otherTxt;
     private TextView other;
+
+    private Button shareBluetooth;
+    // set how long device should be visible
+    private static final int DISCOVER_DURATION = 300;
+    private static final int REQUEST_BLU = 1;
 
     private NfcAdapter nfcAdapter;
 
@@ -86,6 +102,8 @@ public class ShowCardActivity extends AppCompatActivity {
         skype = (TextView)findViewById(R.id.myCard_skypeVal);
         otherTxt = (TextView)findViewById(R.id.myCard_otherTxt);
         other = (TextView)findViewById(R.id.myCard_otherVal);
+
+        shareBluetooth = (Button)findViewById(R.id.bluetooth_btn);
 
         // set values of Card object taken from Intent (and hide empty fields)
         setMyCardValues();
@@ -307,4 +325,106 @@ public class ShowCardActivity extends AppCompatActivity {
         }
         return null;
     }
+
+
+    // share Card via Bluetooth
+    public void shareViaBluetooth(View view){
+
+        BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        // if adapter was not found bluetooth is not available on the device
+        if(btAdapter == null) {
+            Toast.makeText(this, "Bluetooth nie jest obsługiwany na urządzeniu", Toast.LENGTH_LONG).show();
+        } else {
+            enableBluetooth();
+        }
+    }
+
+    public void enableBluetooth() {
+
+        // ask for permission to enable Bluetooth and make device visible
+        Intent discoveryIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoveryIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, DISCOVER_DURATION);
+        startActivityForResult(discoveryIntent, REQUEST_BLU);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(resultCode == DISCOVER_DURATION && requestCode == REQUEST_BLU) {
+
+            // set type of file to be sent via Bluetooth
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+
+            // convert card to json format
+            try {
+
+                cardJSON.put("logoPath", myCard.getLogoImgPath());
+                cardJSON.put("name", myCard.getName());
+                cardJSON.put("mobile", myCard.getMobile());
+                cardJSON.put("phone", myCard.getPhone());
+                cardJSON.put("fax", myCard.getFax());
+                cardJSON.put("email", myCard.getEmail());
+                cardJSON.put("web", myCard.getWeb());
+                cardJSON.put("company", myCard.getCompany());
+                cardJSON.put("address", myCard.getAddress());
+                cardJSON.put("job", myCard.getJob());
+                cardJSON.put("facebook", myCard.getFacebook());
+                cardJSON.put("tweeter", myCard.getTweeter());
+                cardJSON.put("skype", myCard.getSkype());
+                cardJSON.put("other", myCard.getOther());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            // for debugging
+            System.out.println("The directory is: " + Environment.getExternalStorageDirectory());
+
+            // write json file to bluetoothCard.json
+            try (FileWriter file = new FileWriter("/storage/emulated/0/bluetoothCard.json")) {
+                // convert json file to string
+                file.write(cardJSON.toString());
+                // for debugging
+                System.out.println("Udało się skopiować obiekt json do pliku ...");
+                System.out.println("\nJSON Object: " + cardJSON);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // prepare file to send and send file if bluetooth was found and was not canceled during the process
+            File f = new File(Environment.getExternalStorageDirectory(), "bluetoothCard.json");
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(f));
+            PackageManager pm = getPackageManager();
+            List<ResolveInfo> appsList = pm.queryIntentActivities(intent, 0);
+
+            if(appsList.size() > 0) {
+                String packageName = null;
+                String className = null;
+                boolean found = false;
+
+                for(ResolveInfo info : appsList) {
+                    packageName = info.activityInfo.packageName;
+                    if(packageName.equals("com.android.bluetooth")) {
+                        className = info.activityInfo.name;
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    Toast.makeText(this, "Bluetooth nie został znaleziony",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    intent.setClassName(packageName, className);
+                    startActivity(intent);
+                }
+            }
+        } else {
+            Toast.makeText(this, "Bluetooth został anulowany", Toast.LENGTH_LONG)
+                    .show();
+        }
+    }
+
 }
