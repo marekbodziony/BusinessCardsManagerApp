@@ -10,12 +10,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 /**
- * Activity represents main screen of application "Business Cards Manager"
+ * Activity represents main screen of application "Business Cards Manager".
  *
  * This activity navigates to different application screens depending on user choice.
  *
- * @author Marek Bodziony, Jacek Kułak
- * release date: 23.01.2017
+ * @author Marek Bodziony, Jacek Kułak.
+ * Release date: 23.01.2017
  *
  */
 public class WelcomeActivity extends AppCompatActivity {
@@ -83,8 +83,8 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     /**
-     * Method that shows MyCard screen
-     * It creates Intent with details of MyCardsListActivity.class, put in it information about action performed and start that Intent
+     * Method that shows MyCard screen.
+     * It creates Intent with details of "MyCardsListActivity.class", put in it information about action performed and start this Intent.
      *
      * @param view The button which was clicked
      */
@@ -94,8 +94,8 @@ public class WelcomeActivity extends AppCompatActivity {
         startActivity(showMyCardActivity);
     }
     /**
-     * Method that shows Cards List screen
-     * It creates Intent with details of CardsListActivity.class, put in it information about action performed and start that Intent
+     * Method that shows Cards List screen.
+     * It creates Intent with details of "CardsListActivity.class", put in it information about action performed and start this Intent.
      *
      * @param view The button which was clicked
      */
@@ -105,8 +105,8 @@ public class WelcomeActivity extends AppCompatActivity {
         startActivity(showCardsListActivity);
     }
     /**
-     * Method that shows screen where new Card can added
-     * It creates Intent with details of EditCardActivity.class, put in it information about action performed and start that Intent
+     * Method that shows screen where new Card can be added.
+     * It creates Intent with details of "EditCardActivity.class", put in it information about action performed and start this Intent.
      *
      * @param view The button which was clicked
      */
@@ -116,8 +116,8 @@ public class WelcomeActivity extends AppCompatActivity {
         startActivity(showEditScreenActivity);
     }
     /**
-     * Method that shows application color style settings screen
-     * It creates Intent with details of EditCardActivity.class, put in it information about action performed and start that Intent
+     * Method that shows application color style settings screen.
+     * It creates Intent with details of "EditCardActivity.class", put in it information about action performed and start this Intent.
      *
      * @param view The button which was clicked
      */
@@ -127,7 +127,7 @@ public class WelcomeActivity extends AppCompatActivity {
         startActivity(showSettingsScreenActivity);
     }
     /**
-     * Method that closes application
+     * Method will close application when "turn off" button is clicked.
      *
      * @param view The button which was clicked
      */
@@ -136,7 +136,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     /**
-     * Method that closes application when "back" button will be clicked
+     * Method will close application when "back" button is clicked.
      */
     @Override
     public void onBackPressed(){
