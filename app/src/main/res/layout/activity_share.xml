@@ -19,8 +19,7 @@
             android:layout_width="250px"
             android:layout_height="250px"
             android:id="@+id/bluetooth_btn"
-            android:background="@drawable/bluetooth"
-            android:onClick="onBluetoothpress"/>
+            android:background="@drawable/bluetooth"/>
         <Button
             android:layout_width="250px"
             android:layout_height="250px"
