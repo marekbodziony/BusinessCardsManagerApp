@@ -24,9 +24,6 @@ public class ShareActivity extends AppCompatActivity {
     private NfcAdapter nfcAdapter;
     private static boolean closeShareActivity = false;
 
-    private static final int DISCOVER_DURATION = 300;
-    private static final int REQUEST_BLU = 1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +53,6 @@ public class ShareActivity extends AppCompatActivity {
             Toast.makeText(this,"Tap your device with other device to share your Card via NFC",Toast.LENGTH_LONG).show();
             finish();
         }
-
     }
 
     @Override
