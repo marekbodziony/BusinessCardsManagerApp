@@ -9,27 +9,52 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+/**
+ * Activity represents main screen of application "Business Cards Manager"
+ *
+ * This activity navigates to different application screens depending on user choice.
+ *
+ * @author Marek Bodziony, Jacek Kułak
+ * release date: 23.01.2017
+ *
+ */
 public class WelcomeActivity extends AppCompatActivity {
-
-    private Button settings;
-    private Button turnOff;
-    private Button cards;
-    private Button add;
-    private Button myCard;
-
+    /**
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome1);
+
+        /**
+         * An ImageView corresponding with application logo
+         */
         ImageView img = (ImageView) findViewById(R.id.imageView);
 
-        // check what style is saved in preferences
+        /**
+         * Object "settings" will carry information about actually chosen application color style
+         */
         SharedPreferences settings = getSharedPreferences("Style", 0);
+        /**
+         * Default boolean value used to carry information about application color style1
+         */
         boolean Style1 = settings.getBoolean("Style1", false);
+        /**
+         * Default boolean value used to carry information about application color style2
+         */
         boolean Style2 = settings.getBoolean("Style2", false);
+        /**
+         * Default boolean value used to carry information about application color style3
+         */
         boolean Style3 = settings.getBoolean("Style3", false);
+        /**
+         * Default boolean value used to carry information about application color style4
+         */
         boolean Style4 = settings.getBoolean("Style4", false);
-        // match saved style with particular logo to be displayed
+
+        /**
+         * Set particular logo depending of application color style selected
+         */
         if(Style1==true)
             img.setImageResource(R.drawable.welcome_logo_green);
         if(Style2==true)
@@ -39,9 +64,6 @@ public class WelcomeActivity extends AppCompatActivity {
         if(Style4==true)
             img.setImageResource(R.drawable.welcome_logo_x256);
 
-        myCard = (Button)findViewById(R.id.my_card_btn);
-        add =  (Button)findViewById(R.id.add_btn);
-        turnOff = (Button)findViewById(R.id.turn_off_btn);
 
         // to prevent lunching two applications at the same time when receiving NDEF message via NFC
         // Android will open this app once again because filter is set in Manifest.xml, so current version should be finished
@@ -60,35 +82,62 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method that shows MyCard screen
+     * It creates Intent with details of MyCardsListActivity.class, put in it information about action performed and start that Intent
+     *
+     * @param view The button which was clicked
+     */
     public void showMyCard(View view){
         Intent showMyCardActivity = new Intent(this,MyCardsListActivity.class);
         showMyCardActivity.putExtra("action","myCard");
         startActivity(showMyCardActivity);
     }
-    //
+    /**
+     * Method that shows Cards List screen
+     * It creates Intent with details of CardsListActivity.class, put in it information about action performed and start that Intent
+     *
+     * @param view The button which was clicked
+     */
     public void showCardsList(View view){
         Intent showCardsListActivity = new Intent(this,CardsListActivity.class);
         showCardsListActivity.putExtra("action","list");
         startActivity(showCardsListActivity);
     }
-
+    /**
+     * Method that shows screen where new Card can added
+     * It creates Intent with details of EditCardActivity.class, put in it information about action performed and start that Intent
+     *
+     * @param view The button which was clicked
+     */
     public void showEditScreen (View view){
         Intent showEditScreenActivity = new Intent(this,EditCardActivity.class);
         showEditScreenActivity.putExtra("action","new");
         startActivity(showEditScreenActivity);
     }
-
+    /**
+     * Method that shows application color style settings screen
+     * It creates Intent with details of EditCardActivity.class, put in it information about action performed and start that Intent
+     *
+     * @param view The button which was clicked
+     */
     public void showSettingsScreen (View view){
         Intent showSettingsScreenActivity = new Intent(this,SettingsActivity.class);
         showSettingsScreenActivity.putExtra("action","settings");
         startActivity(showSettingsScreenActivity);
     }
-
+    /**
+     * Method that closes application
+     *
+     * @param view The button which was clicked
+     */
     public void turnOff (View view) {
         finish();
     }
 
-    // when "back" button is pressed do nothing
+    /**
+     * Method that closes application when "back" button will be clicked
+     */
     @Override
     public void onBackPressed(){
         finish();
