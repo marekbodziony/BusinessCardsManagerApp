@@ -11,7 +11,6 @@ import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -75,24 +74,9 @@ public class WelcomeActivity extends AppCompatActivity {
         if(Style4==true)
             img.setImageResource(R.drawable.welcome_logo_x256);
 
-
-        // to prevent lunching two applications at the same time when receiving NDEF message via NFC
-        // Android will open this app once again because filter is set in Manifest.xml, so current version should be finished
-        String intentSrc = getIntent().toString();
-        // if Intent was sent via NFC (flg=0x10400000) Android will open app again with Main screen (WelcomeActivity)
-        if (intentSrc.contains("flg=0x10400000")){
-            Log.d("CardSettings","WelcomeActivity receive Intent from NFC! Activity was finished");
-            finish();
-        }
-        // if Intent was sent via NFC to another Activity  and now it comes back with parameter "action" set to "NFC"
-        if (intentSrc.contains("flg=0x4000000")){
-            if (getIntent().getStringExtra("action") != null && getIntent().getStringExtra("action").equals("NFC")) {
-                Log.d("CardSettings", "WelcomeActivity finished! Intent = " + getIntent().getStringExtra("action"));
-                finish();
-            }
-        }
-
-        // for preventing app duplicate when receiving NDEF message
+        /**
+         * NfcAdapter and Intent filter for disabling duplicate app running when receiving Intent from NDEF message
+         */
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         nfcPendingIntent = PendingIntent.getActivity(this,0,new Intent(this,getClass()).setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),0);
         IntentFilter ndefFilter = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
@@ -165,29 +149,37 @@ public class WelcomeActivity extends AppCompatActivity {
     public void onBackPressed(){
         finish();
     }
-
+    /**
+     * Enable foreground dispatcher for handling Intent from NDEF message
+     */
     @Override
     public void onResume(){
         super.onResume();
         nfcAdapter.enableForegroundDispatch(this,nfcPendingIntent,ndefIntentFilters,null);
     }
+    /**
+     * Disable foreground dispatcher for handling Intent from NDEF message
+     */
     @Override
     public void onPause(){
         super.onPause();
         nfcAdapter.disableForegroundDispatch(this);
     }
+    /**
+     * Handle Intent from NDEF message - forward to CardListActivity
+    */
     @Override
     public void onNewIntent (Intent intent){
-        Toast.makeText(this,"New NDEF meesage was intercept, action = " + intent.getAction(),Toast.LENGTH_SHORT).show();
-        //Intent ndefIntent = getIntent().setClass(this, CardsListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        //ndefIntent.putExtra("action","newNFC");
         Card c = getCardFromNdefMessage(intent);
         startActivity(putCardInfoToIntent(c));
     }
 
-    //-------------------------
-
-    // get Card info from NDEF message
+    /**
+     * Method gets Card info from NDEF message
+     *
+     * @param intent The Intent from NDEF message
+     * @return card Card object
+     */
     private Card getCardFromNdefMessage(Intent intent){
         Card card = null;
         NdefMessage[] msgs = null;
@@ -221,7 +213,12 @@ public class WelcomeActivity extends AppCompatActivity {
         return card;
     }
 
-    // get Card information from JSON
+    /**
+     * Method gets Card information from JSON file
+     *
+     * @param payload_card_details Information in byte[] with Card details
+     * @return card Card object
+     */
     private Card getCardFromJSON(byte[] payload_card_details){
 
         Card card = null;
@@ -250,6 +247,12 @@ public class WelcomeActivity extends AppCompatActivity {
         Log.d("CardNFC","Card from JSON created");
         return card;
     }
+    /**
+     * Method puts Card details to Intent
+     *
+     * @param card Card object
+     * @return intent Intent object witch will be sent to CardsListActivity
+     */
     // private method put MyCard data (fields) to Intent object
     private Intent putCardInfoToIntent(Card card){
         Intent i = new Intent(this,CardsListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -270,5 +273,4 @@ public class WelcomeActivity extends AppCompatActivity {
         i.putExtra("other",card.getOther());
         return i;
     }
-
 }
