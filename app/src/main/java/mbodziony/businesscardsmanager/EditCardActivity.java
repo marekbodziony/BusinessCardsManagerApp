@@ -118,7 +118,7 @@ public class EditCardActivity extends AppCompatActivity {
         if (!isCardReadyToSave()) return;   // check if fields name and/or mobile phone are not empty
 
         if (editCardIntent.getStringExtra("action").equals("new") || editCardIntent.getStringExtra("action").equals("edit")){
-            editCardIntent.setClass(this,CardsListActivity.class);
+            editCardIntent.setClass(this,CardsListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         }
         else if (editCardIntent.getStringExtra("action").equals("newMyCard") || editCardIntent.getStringExtra("action").equals("editMyCard")){
             editCardIntent.setClass(this,MyCardsListActivity.class);

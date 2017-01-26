@@ -124,6 +124,7 @@ public class ShowCardActivity extends AppCompatActivity {
                         else if (action.equals("cardFromList")) cardIntent.setClass(getApplicationContext(), CardsListActivity.class);
                         putCardInfoToIntent();
                         cardIntent.putExtra("action","delete");     // Card from this Intent should be deleted in database
+                        cardIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(cardIntent);
                     }
                 })
