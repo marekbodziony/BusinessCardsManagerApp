@@ -87,6 +87,14 @@ public class WelcomeActivity extends AppCompatActivity {
         catch (IntentFilter.MalformedMimeTypeException e) {
             e.printStackTrace();
         }
+        // to prevent lunching two applications at the same time when receiving NDEF message via NFC
+        // Android will open this app once again because filter is set in Manifest.xml, so current version should be finished
+        String intentSrc = getIntent().toString();
+        // if Intent was sent via NFC (flg=0x10400000) Android will open app again with Main screen (WelcomeActivity)
+        if (intentSrc.contains("flg=0x10400000")){
+            Log.d("CardSettings","WelcomeActivity receive Intent from NFC! Activity was finished");
+            finish();
+        }
     }
 
     /**
