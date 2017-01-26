@@ -18,14 +18,14 @@
         <Button
             android:layout_width="250px"
             android:layout_height="250px"
-            android:id="@+id/bluetooth_btn"
-            android:background="@drawable/bluetooth"/>
+            android:id="@+id/writeNfcTag_btn"
+            android:background="@drawable/nfc_tag"/>
         <Button
             android:layout_width="250px"
             android:layout_height="250px"
             android:id="@+id/nfc_btn"
             android:background="@drawable/nfc"
-            android:layout_toRightOf="@id/bluetooth_btn"
+            android:layout_toRightOf="@id/writeNfcTag_btn"
             android:layout_marginLeft="60px"
             android:onClick="shareViaNfc"/>
 
