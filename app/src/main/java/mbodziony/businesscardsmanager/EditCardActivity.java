@@ -1,7 +1,10 @@
 package mbodziony.businesscardsmanager;
 
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
+import android.nfc.NfcAdapter;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +40,11 @@ public class EditCardActivity extends AppCompatActivity {
     //private Card myCard;
     private Intent editCardIntent;
 
+    // for filtering Intents in NDEF message
+    private NfcAdapter nfcAdapter;
+    private PendingIntent nfcPendingIntent;
+    private IntentFilter[] ndefIntentFilters;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +73,21 @@ public class EditCardActivity extends AppCompatActivity {
         cancel = (Button)findViewById(R.id.editMyCard_cancelBtn);
         save = (Button)findViewById(R.id.editMyCard_saveBtn);
         photo = (Button)findViewById(R.id.takePhotoBtn);
+
+        /**
+         * NfcAdapter and Intent filter for disabling duplicate app running when receiving Intent from NDEF message
+         */
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        nfcPendingIntent = PendingIntent.getActivity(this,0,new Intent(this,getClass()).setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),0);
+        IntentFilter ndefFilter = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
+        try {
+            ndefFilter.addDataType("text/plain");                   // set payload type which interests us in NDEF message
+            ndefIntentFilters = new IntentFilter[]{ndefFilter};
+        }
+        catch (IntentFilter.MalformedMimeTypeException e) {
+            e.printStackTrace();
+        }
+
     }
 
     // get card info from Intent object and display on screen
@@ -118,7 +141,7 @@ public class EditCardActivity extends AppCompatActivity {
         if (!isCardReadyToSave()) return;   // check if fields name and/or mobile phone are not empty
 
         if (editCardIntent.getStringExtra("action").equals("new") || editCardIntent.getStringExtra("action").equals("edit")){
-            editCardIntent.setClass(this,CardsListActivity.class);
+            editCardIntent.setClass(this,CardsListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         }
         else if (editCardIntent.getStringExtra("action").equals("newMyCard") || editCardIntent.getStringExtra("action").equals("editMyCard")){
             editCardIntent.setClass(this,MyCardsListActivity.class);
@@ -185,5 +208,29 @@ public class EditCardActivity extends AppCompatActivity {
         editCardIntent.putExtra("tweeter",""+tweeter.getText());
         editCardIntent.putExtra("skype",""+skype.getText());
         editCardIntent.putExtra("other",""+other.getText());
+    }
+
+    /**
+     * Enable foreground dispatcher for handling Intent from NDEF message
+     */
+    @Override
+    public void onResume(){
+        super.onResume();
+        nfcAdapter.enableForegroundDispatch(this,nfcPendingIntent,ndefIntentFilters,null);
+    }
+    /**
+     * Disable foreground dispatcher for handling Intent from NDEF message
+     */
+    @Override
+    public void onPause(){
+        super.onPause();
+        nfcAdapter.disableForegroundDispatch(this);
+    }
+    /**
+     * Handle Intent from NDEF message - forward to CardListActivity
+     */
+    @Override
+    public void onNewIntent (Intent intent){
+        // do nothing when new Ivent came while editing Card
     }
 }

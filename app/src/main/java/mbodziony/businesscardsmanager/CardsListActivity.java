@@ -121,6 +121,8 @@ public class CardsListActivity extends AppCompatActivity {
             Log.d("CardNFC","NDEF Intent received");
             Card card = getCardFromNdefMessage(intent);
             dbManager.insertNewCard("cards",card);
+            getCardsFromDatabase();
+            card.setId(cardList.get(cardList.size()-1).getId());
             Toast.makeText(getApplicationContext(),"Card SAVED",Toast.LENGTH_SHORT).show();
             showSelectedCard(card);
         }
@@ -154,6 +156,8 @@ public class CardsListActivity extends AppCompatActivity {
         // when new Card received via NFC - add new Card to database and show it (go to ShowCardActivity)
         if (cardIntent.getStringExtra("action").equals("newNFC")){
             dbManager.insertNewCard("cards",card);
+            getCardsFromDatabase();
+            card.setId(cardList.get(cardList.size()-1).getId());
             Toast.makeText(getApplicationContext(),"Card SAVED",Toast.LENGTH_SHORT).show();
             showSelectedCard(card);
         }
