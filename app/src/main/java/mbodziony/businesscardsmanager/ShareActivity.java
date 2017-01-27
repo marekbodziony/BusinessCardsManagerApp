@@ -1,30 +1,19 @@
 package mbodziony.businesscardsmanager;
 
 import android.app.PendingIntent;
-import android.bluetooth.BluetoothAdapter;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
-import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.Settings;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import org.json.JSONObject;
-
-import java.io.File;
-import java.util.List;
 
 public class ShareActivity extends AppCompatActivity {
 
@@ -111,7 +100,7 @@ public class ShareActivity extends AppCompatActivity {
     @Override
     public void onNewIntent (Intent intent){
         Card c = getCardFromNdefMessage(intent);
-        startActivity(putCardInfoToIntent(c));
+        startActivity(putCardIntoIntent(c));
     }
 
     /**
@@ -194,8 +183,8 @@ public class ShareActivity extends AppCompatActivity {
      * @return intent Intent object witch will be sent to CardsListActivity
      */
     // private method put MyCard data (fields) to Intent object
-    private Intent putCardInfoToIntent(Card card){
-        Intent i = new Intent(this,CardsListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    private Intent putCardIntoIntent(Card card){
+        Intent i = new Intent(this,ShowCardActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.putExtra("action","newNFC");
         i.putExtra("logoPath","null");  // receiving Logo via NFC not supported in this app version
         i.putExtra("name",card.getName());
@@ -226,7 +215,7 @@ public class ShareActivity extends AppCompatActivity {
         return card;
     }
 
-    // write Card to NFC tag
+    // write Card to NFC tag - go to ShowCardActivity and write Card to tag
     public void writeToNfcTag(View view){
         // if device not support NFC - display information about this to the user
         if (nfcAdapter == null) {
@@ -240,11 +229,13 @@ public class ShareActivity extends AppCompatActivity {
             Intent gotoNfcSettings = new Intent(Settings.ACTION_NFC_SETTINGS);
             startActivity(gotoNfcSettings);
         }
-        // if user choose to write Card to Tag
+        // if user choose to write Card to Tag - go to ShowCardActivity and write Card to tag
         else {
-//            Intent writeToTag = putCardInfoToIntent(getCardFromIntent()).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            writeToTag.putExtra("action","writeToTag");
-//            startActivity(writeToTag);
+            Intent writeToTag = putCardIntoIntent(getCardFromIntent()).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            String action = writeToTag.getStringExtra("action");
+            if (action.equals("myCard")) writeToTag.putExtra("action","myCardWriteToTag");
+            else writeToTag.putExtra("action","writeToTag");
+            startActivity(writeToTag);
             finish();
         }
     }

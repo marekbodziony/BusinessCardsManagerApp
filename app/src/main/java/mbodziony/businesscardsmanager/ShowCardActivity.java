@@ -5,13 +5,15 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
+import android.nfc.Tag;
+import android.nfc.tech.Ndef;
+import android.nfc.tech.NdefFormatable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
@@ -75,6 +77,9 @@ public class ShowCardActivity extends AppCompatActivity {
     private PendingIntent nfcPendingIntent;
     private IntentFilter[] ndefIntentFilters;
 
+    private boolean mWriteMode = false;
+    private IntentFilter[] mWriteTagFilters;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +130,10 @@ public class ShowCardActivity extends AppCompatActivity {
         catch (IntentFilter.MalformedMimeTypeException e) {
             e.printStackTrace();
         }
+
+        // Intent filters for writing to a tag
+        IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+        mWriteTagFilters = new IntentFilter[]{tagDetected};
 
     }
 
@@ -265,7 +274,8 @@ public class ShowCardActivity extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         cardIntent = getIntent().setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        if(cardIntent.getStringExtra("action").equals("myCard") || cardIntent.getStringExtra("action").equals("editMyCard")){
+        if(cardIntent.getStringExtra("action").equals("myCard") || cardIntent.getStringExtra("action").equals("editMyCard")||
+                cardIntent.getStringExtra("action").equals("myCardWriteToTag")){
             cardIntent.setClass(this,WelcomeActivity.class);
         }
         else if(cardIntent.getStringExtra("action").equals("cardFromList") || cardIntent.getStringExtra("action").equals("edit")
@@ -286,7 +296,8 @@ public class ShowCardActivity extends AppCompatActivity {
         if (nfcAdapter != null && nfcAdapter.isEnabled()) {
             nfcAdapter.setNdefPushMessage(putCardContentToNdefMessage(), this);
         }
-        nfcAdapter.enableForegroundDispatch(this,nfcPendingIntent,ndefIntentFilters,null);
+        enableNdefExchange();
+        whatModeShouldBeOn(cardIntent.getStringExtra("action"));
     }
 
     // share Card with other Android devices
@@ -459,8 +470,15 @@ public class ShowCardActivity extends AppCompatActivity {
      */
     @Override
     public void onNewIntent (Intent intent){
-        Card c = getCardFromNdefMessage(intent);
-        startActivity(putCardInfoToIntent(c));
+        if (!mWriteMode && NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+            Card c = getCardFromNdefMessage(intent);
+            startActivity(putCardInfoToIntent(c));
+        }
+        //Tag writing mode
+        if (mWriteMode && NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())){
+            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            writeTag(putCardContentToNdefMessage(),tag);
+        }
     }
 
     /**
@@ -563,5 +581,92 @@ public class ShowCardActivity extends AppCompatActivity {
         return i;
     }
 
+    // what mode should be on (reading / writing to tag)
+    private void whatModeShouldBeOn(String mode){
+        if (mode.equals("writeToTag")){
+            disableNdefExchange();
+            enableTagWrite();
+            new android.app.AlertDialog.Builder(this).setTitle("Touch TAG to write")
+                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialogInterface) {
+                            disableTagWrite();
+                            enableNdefExchange();
+                        }
+                    }).create().show();
+        }
+    }
+
+
+
+
+    // write to tag method
+    private boolean writeTag(NdefMessage ndefMsg,Tag tag){
+        int size = ndefMsg.getByteArrayLength();
+        try{
+            Ndef ndef = Ndef.get(tag);
+            if (ndef != null){
+                ndef.connect();
+                if (!ndef.isWritable()){
+                    Toast.makeText(this,"tag is read-only!",Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                if (ndef.getMaxSize() < size){
+                    Toast.makeText(this,"Tag capacity is " + ndef.getMaxSize() + " bytes, message is " + size + " bytes.",Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                ndef.writeNdefMessage(ndefMsg);
+                Toast.makeText(this,"Wrote message to pre-formatted tag.",Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            else{
+                NdefFormatable format = NdefFormatable.get(tag);
+                if (format != null){
+                    try{
+                        format.connect();
+                        format.format(ndefMsg);
+                        Toast.makeText(this,"Formatted tag and wrote message.",Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                    catch (IOException e){
+                        Toast.makeText(this,"Failed to format tag.",Toast.LENGTH_SHORT).show();
+                        Log.d("NFC",e.getMessage());
+                    }
+                }
+                else {
+                    Toast.makeText(this,"Tag doesn't suppoprt NDEF!",Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+        }
+        catch (Exception e){
+            Toast.makeText(this,"Failed to write tag!",Toast.LENGTH_SHORT).show();
+            Log.d("NFC",e.getMessage());
+        }
+        return false;
+    }
+
+    // enable NDEF exchange between Android devices
+    private void enableNdefExchange(){
+        nfcAdapter.enableForegroundDispatch(this,nfcPendingIntent,ndefIntentFilters,null);
+        nfcAdapter.setNdefPushMessage(putCardContentToNdefMessage(), this);
+    }
+    // disable NDEF exchange between Android devices
+    private void disableNdefExchange(){
+        nfcAdapter.disableForegroundDispatch(this);
+    }
+    // enable tag writing
+    private void enableTagWrite(){
+        nfcAdapter.disableForegroundDispatch(this);
+        mWriteMode = true;
+        IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+        mWriteTagFilters = new IntentFilter[]{tagDetected};
+        nfcAdapter.enableForegroundDispatch(this,nfcPendingIntent,mWriteTagFilters,null);
+    }
+    // disable tag writing
+    private void disableTagWrite(){
+        mWriteMode = false;
+        nfcAdapter.disableForegroundDispatch(this);
+    }
 
 }
