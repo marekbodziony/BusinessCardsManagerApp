@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -289,7 +290,8 @@ public class ShowCardActivity extends AppCompatActivity {
 
     // share Card with other Android devices
     public void shareCard(View view){
-        Intent shareCardIntent = new Intent(this,ShareActivity.class);
+        Intent shareCardIntent = getIntent().setClass(this,ShareActivity.class);
+        putCardInfoToIntent();
         startActivity(shareCardIntent);
     }
 
@@ -443,10 +445,6 @@ public class ShowCardActivity extends AppCompatActivity {
                     .show();
         }
     }
-
-    /**
-     * Enable foreground dispatcher for handling Intent from NDEF message
-     */
     /**
      * Disable foreground dispatcher for handling Intent from NDEF message
      */
