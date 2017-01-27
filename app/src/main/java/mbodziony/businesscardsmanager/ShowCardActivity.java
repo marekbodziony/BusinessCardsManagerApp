@@ -268,7 +268,8 @@ public class ShowCardActivity extends AppCompatActivity {
         if(cardIntent.getStringExtra("action").equals("myCard") || cardIntent.getStringExtra("action").equals("editMyCard")){
             cardIntent.setClass(this,WelcomeActivity.class);
         }
-        else if(cardIntent.getStringExtra("action").equals("cardFromList") || cardIntent.getStringExtra("action").equals("edit")){
+        else if(cardIntent.getStringExtra("action").equals("cardFromList") || cardIntent.getStringExtra("action").equals("edit")
+                || cardIntent.getStringExtra("action").equals("writeToTag")){
             cardIntent.setClass(this,CardsListActivity.class);
         }
         else{
