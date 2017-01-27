@@ -206,7 +206,6 @@ public class ShareActivity extends AppCompatActivity {
         boolean shouldWriteTag = checkIfNfcAvailable();
        if (shouldWriteTag) {
             String action = getIntent().getStringExtra("action");
-            Toast.makeText(this,"action="+action,Toast.LENGTH_SHORT).show();
             Intent writeToTag = putCardIntoIntent(getCardFromIntent()).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             if (action.equals("myCard") || action.equals("editMyCard")) writeToTag.putExtra("action","myCardWriteToTag");
             else writeToTag.putExtra("action","writeToTag");

@@ -392,7 +392,7 @@ public class ShowCardActivity extends AppCompatActivity {
             // convert card to json format
             try {
 
-                cardJSON.put("logoPath", myCard.getLogoImgPath());
+                cardJSON.put("logoPath", "null");           // sending logo with Card via Bluetooth not available
                 cardJSON.put("name", myCard.getName());
                 cardJSON.put("mobile", myCard.getMobile());
                 cardJSON.put("phone", myCard.getPhone());
