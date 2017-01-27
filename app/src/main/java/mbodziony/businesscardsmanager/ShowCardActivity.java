@@ -583,7 +583,7 @@ public class ShowCardActivity extends AppCompatActivity {
 
     // what mode should be on (reading / writing to tag)
     private void whatModeShouldBeOn(String mode){
-        if (mode.equals("writeToTag")){
+        if (mode.equals("writeToTag") || mode.equals("myCardWriteToTag")){
             disableNdefExchange();
             enableTagWrite();
             new android.app.AlertDialog.Builder(this).setTitle("Touch TAG to write")

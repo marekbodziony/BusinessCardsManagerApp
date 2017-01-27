@@ -17,6 +17,8 @@ import org.json.JSONObject;
 
 public class ShareActivity extends AppCompatActivity {
 
+    private Intent intent;
+
     private NfcAdapter nfcAdapter;
     private PendingIntent nfcPendingIntent;
     private IntentFilter[] ndefIntentFilters;
@@ -47,23 +49,7 @@ public class ShareActivity extends AppCompatActivity {
 
     // method to share Card via NFC
     public void shareViaNfc (View view){
-        // if device not support NFC - display information about this to the user
-        if (nfcAdapter == null) {
-            Toast.makeText(this,"NFC not supported at your device!",Toast.LENGTH_SHORT).show();
-            finish();
-        }
-        // if device support NFC but it's disable at the moment - go to NFC Settings
-        else if (!nfcAdapter.isEnabled()){
-            Toast.makeText(this,"Turn on NFC",Toast.LENGTH_LONG).show();
-            closeShareActivity = true;          // user goes to NFC Settings, Activity can be close if come back after turning-on NFC
-            Intent gotoNfcSettings = new Intent(Settings.ACTION_NFC_SETTINGS);
-            startActivity(gotoNfcSettings);
-        }
-        // if user choose to share Card via NFC while NFC is on - display info to tap devices together
-        else {
-            Toast.makeText(this,"Tap your device with other device to share your Card via NFC",Toast.LENGTH_LONG).show();
-            finish();
-        }
+        checkIfNfcAvailable();              // check is NFC available and show Toast message
     }
 
 
@@ -71,10 +57,10 @@ public class ShareActivity extends AppCompatActivity {
     private void closeThisActivityIfDontNeed(){
         if (nfcAdapter.isEnabled() && closeShareActivity){
             closeShareActivity = false;     // don't close this Activity next time
-            Toast.makeText(this,"Tap your devices together to send a Card.\nIt will start automaticly.",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"NFC is on.",Toast.LENGTH_LONG).show();
             finish();
         }
-        closeShareActivity = false;         // don't close this Activity next time
+        closeShareActivity = false;
     }
 
     /**
@@ -182,11 +168,11 @@ public class ShareActivity extends AppCompatActivity {
      * @param card Card object
      * @return intent Intent object witch will be sent to CardsListActivity
      */
-    // private method put MyCard data (fields) to Intent object
+    // private method put Card data (fields) to Intent object
     private Intent putCardIntoIntent(Card card){
         Intent i = new Intent(this,ShowCardActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.putExtra("action","newNFC");
-        i.putExtra("logoPath","null");  // receiving Logo via NFC not supported in this app version
+        i.putExtra("logoPath","null");  // receiving Card with logo via NFC not supported in this app version
         i.putExtra("name",card.getName());
         i.putExtra("mobile",card.getMobile());
         i.putExtra("phone",card.getPhone());
@@ -217,26 +203,38 @@ public class ShareActivity extends AppCompatActivity {
 
     // write Card to NFC tag - go to ShowCardActivity and write Card to tag
     public void writeToNfcTag(View view){
+        boolean shouldWriteTag = checkIfNfcAvailable();
+       if (shouldWriteTag) {
+            String action = getIntent().getStringExtra("action");
+            Toast.makeText(this,"action="+action,Toast.LENGTH_SHORT).show();
+            Intent writeToTag = putCardIntoIntent(getCardFromIntent()).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            if (action.equals("myCard") || action.equals("editMyCard")) writeToTag.putExtra("action","myCardWriteToTag");
+            else writeToTag.putExtra("action","writeToTag");
+            startActivity(writeToTag);
+            finish();
+        }
+    }
+
+    private boolean checkIfNfcAvailable(){
         // if device not support NFC - display information about this to the user
         if (nfcAdapter == null) {
             Toast.makeText(this,"NFC not supported at your device!",Toast.LENGTH_SHORT).show();
             finish();
+            return false;
         }
         // if device support NFC but it's disable at the moment - go to NFC Settings
         else if (!nfcAdapter.isEnabled()){
-            Toast.makeText(this,"Turn on NFC",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Turn on NFC.",Toast.LENGTH_LONG).show();
             closeShareActivity = true;          // user goes to NFC Settings, Activity can be close if come back after turning-on NFC
             Intent gotoNfcSettings = new Intent(Settings.ACTION_NFC_SETTINGS);
             startActivity(gotoNfcSettings);
+            return false;
         }
-        // if user choose to write Card to Tag - go to ShowCardActivity and write Card to tag
+        // if user choose to share Card via NFC / write to tag while NFC is on - display that NFC is on
         else {
-            Intent writeToTag = putCardIntoIntent(getCardFromIntent()).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            String action = writeToTag.getStringExtra("action");
-            if (action.equals("myCard")) writeToTag.putExtra("action","myCardWriteToTag");
-            else writeToTag.putExtra("action","writeToTag");
-            startActivity(writeToTag);
+            Toast.makeText(this,"NFC is on.",Toast.LENGTH_SHORT).show();
             finish();
+            return true;
         }
     }
 }
