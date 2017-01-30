@@ -6,7 +6,7 @@ Application for mobile devices with Android operating system. It allows to creat
 - You can share Cards via Bluetooth or via NFC
 - You can even write Card to NFC tags
 
-Find more info on our [wiki] (https://github.com/marekbodziony/BusinessCardsManagerApp/wiki) page.
+Find more info on our [**wiki**] (https://github.com/marekbodziony/BusinessCardsManagerApp/wiki) page.
 
 
 <img src=https://github.com/marekbodziony/BusinessCardsManagerApp/blob/master/screens/BusinessCardManager_main_screen.png>
