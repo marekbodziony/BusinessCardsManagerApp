@@ -47,11 +47,11 @@ public class DatabaseManager {
         dbHelper = new DatabaseHelper(context,DB_NAME,null,DB_VERSION);
         try{
             db = dbHelper.getWritableDatabase();
-            Toast.makeText(context,"Connection to DB is open (read/write)",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context,"Connection to DB is open (read/write)",Toast.LENGTH_SHORT).show();
         }
         catch (SQLException e){
             db = dbHelper.getReadableDatabase();
-            Toast.makeText(context,"Connection to DB is open (read only)",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context,"Connection to DB is open (read only)",Toast.LENGTH_SHORT).show();
         }
         return this;
     }
@@ -59,7 +59,7 @@ public class DatabaseManager {
     // close connection to database
     public void close(){
         dbHelper.close();
-        Toast.makeText(context,"Connection to DB is closed",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context,"Connection to DB is closed",Toast.LENGTH_SHORT).show();
     }
 
     // insert new Card into database

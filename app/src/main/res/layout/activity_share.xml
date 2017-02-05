@@ -19,7 +19,8 @@
             android:layout_width="250px"
             android:layout_height="250px"
             android:id="@+id/writeNfcTag_btn"
-            android:background="@drawable/nfc_tag"/>
+            android:background="@drawable/nfc_tag"
+            android:onClick="writeToNfcTag"/>
         <Button
             android:layout_width="250px"
             android:layout_height="250px"
